@@ -1,0 +1,115 @@
+<odoo>
+    <data>
+
+        <!-- inherit view of penalties-->
+        <!-- Form view of Employee irregularity -->
+        <record id="view_penalties_form" model="ir.ui.view">
+            <field name="name">hr.penalties.form.view</field>
+            <field name="model">hr.penalties</field>
+            <field name="arch" type="xml">
+                <form string="Hr Penalties">
+                    <sheet string="Hr Penalties">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object"  class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group string="Hr Penalties" colspan="2" col="4">
+                            <field name="name"/>
+                            <field name="code"/>
+                        </group>
+                        <notebook>
+                            <page string="Penalties">
+                                <field name="penalty"  nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="penalties_no" widget="handle"/>
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="deduction"/>
+                                        <field name="duration"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- tree view of Employee irregularity -->
+        <record id="view_hr_penalties_tree" model="ir.ui.view">
+            <field name="name">hr.penalties.tree.view</field>
+            <field name="model">hr.penalties</field>
+            <field name="arch" type="xml">
+                <tree string="Hr Penalties">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of irregularity -->
+        <record id="action_hr_penalties" model="ir.actions.act_window">
+            <field name="name">Hr Penalties Window</field>
+            <field name="res_model">hr.penalties</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_hr_penalties" parent="hr_payroll.menu_hr_payroll_configuration" name="Penalties" action="action_hr_penalties"/>
+
+        <record id="view_penalty_type_form" model="ir.ui.view">
+            <field name="name">Employee Penalty</field>
+            <field name="model">hr.employee.penalties</field>
+            <field name="arch" type="xml">
+                <form string="Employee Penalty" >
+                    <header>
+                        <button name="action_compute_penalties" type="object" string="Compute Penalty" states="draft" class="oe_highlight" attrs="{'invisible':[('flag','=',True)]}" />
+                        <button name="action_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
+                        <button name="action_hr_approve" type="object" string="Hr Approval " states="confirm" class="oe_highlight"/>
+                        <button name="action_ceo_approve" type="object" string="CEO Approval" states="hr_manager" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm,hr_manager,done"/>
+                    </header>
+                    <sheet string="Employee Penalty">
+                        <group string="Employee Penalty" colspan="2" col="4">
+                            <field name="employee" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="dep" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="hr_penalty_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="current_penalty" readonly="True"/>
+                            <field name="previous" readonly="True"/>
+                            <field name="flag" invisible="True"/>
+                            <field name="deduction_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="deduc_ref" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="current_pointer" invisible="True"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--  tree view of Employee Penalty ;-->
+        <record id="view_penalty_type_tree" model="ir.ui.view">
+            <field name="name">Employee Penalty</field>
+            <field name="model">hr.employee.penalties</field>
+            <field name="arch" type="xml">
+                <tree string="Penalty Type">
+                    <field name="employee"/>
+                    <field name="dep"/>
+                    <field name="hr_penalty_id"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_penalty" model="ir.actions.act_window">
+            <field name="name">Employee Penalty</field>
+            <field name="res_model">hr.employee.penalties</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_Penalty" parent="menu_employee_process" name="Employee Penalty" action="action_penalty"/>
+    </data>
+</odoo>

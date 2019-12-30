@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo> 
+
+
+    <!-- inherit view of payslip-->
+    <record id="custom_hr_employee_form" model="ir.ui.view">
+        <field name="name">custom.hr.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <field name="barcode" position="after">
+                <field name="device_id" string="Device ID" />
+            </field>
+        </field>
+    </record>
+
+
+	<record id="read_excel_form" model="ir.ui.view">
+		<field name="name">read.excel.form</field>
+		<field name="model">read.excel</field>
+		<field name="arch" type="xml">
+            <form string="Import Excel">
+                <group>
+                <field name="excel_file" widget="binary"/>
+                </group>
+                <footer>
+                    <button string="Import Excel File" name="import_excel_file" type="object" class="oe_highlight" />
+                </footer>
+                </form>
+			
+		</field>
+	</record>
+
+    <record id="read_excel_action" model="ir.actions.act_window">
+        <field name="name">Import Excel File</field>
+        <field name="res_model">read.excel</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="read_excel_menu" name="Import Attendance Records" parent="hr_attendance.menu_hr_attendance_root" sequence="40" groups="hr_attendance.group_hr_attendance_user" action="read_excel_action"/>
+
+</odoo>

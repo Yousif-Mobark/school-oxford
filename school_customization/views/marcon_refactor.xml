@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="website.default_website" model="website">
+            <field name="social_twitter"></field>
+            <field name="social_facebook"></field>
+            <field name="social_googleplus"></field>
+            <field name="social_github"></field>
+            <field name="social_youtube"></field>
+            <field name="social_linkedin"></field>
+        </record>
+
+        <template id="footer_default_openeducat" inherit_id="website.footer_custom" customize_show="True" name="Automatic Footer">
+            <xpath expr="//div[hasclass('row')]/div[3]" position="replace">
+                <div class="col-lg-4">
+                    <h5><span t-field="res_company.name"/><small> - <a href="/aboutus">About us</a></small></h5>
+                    <p>Our products apply unique and powerful technology that helps educational institutes manage, connect, communicate and collaborate effectively among students, teachers and back office.</p>
+                </div>
+            </xpath>
+        </template>
+    </data>
+
+    <data noupdate="0">
+        <record id="base.main_partner" model="res.partner">
+            <field name="name">MarconEdu</field>
+            <field name="street">602 Suyojan</field>
+            <field name="street2">Off. C.G.Road</field>
+            <field name="city">Ahmedabad</field>
+            <field name="zip">380009</field>
+            <field name='country_id' ref='base.in'/>
+            <field name='state_id' ref='base.state_in_gj'/>
+            <field name="phone">0091-79-4032 6988</field>
+            <field name="email">info@markoncs.com</field>
+            <field name="website">www.markoncs.com</field>
+        </record>
+<!--        <record id="base.main_company" model="res.company">-->
+<!--            <field name="logo">-->
+<!--            </field>-->
+<!--        </record>-->
+    </data>
+
+    <template id="layout_logo_show_inherit" inherit_id="website.layout_logo_show" customize_show="True" name="Show Logo">
+        <xpath expr="//header//a[hasclass('navbar-brand')]" position="replace">
+            <!--<xpath expr="//div[hasclass('navbar-header')]" position="inside">-->
+            <a href="/" class="navbar-brand logo">
+                <img src="" class="img img-responsive" alt="Logo of MarconEdu" title="MarconEdu" />
+            </a>
+        </xpath>
+    </template>
+
+    <template id="top_navbar_mid_menu" inherit_id="website.layout" name="Header Layout Menu">
+        <xpath expr="//header" position="before">
+            <div class="oe_structure">
+                <div id="custom-pre-header">
+                    <div class="container">
+                        <nav class="header-nav-top pull-right">
+
+                            <div id="social">
+                                <a href="" target="_blank">
+                                    <i class="fa fa-facebook fa-1x img-circle"></i>
+                                </a>
+                                <a href="https://twitter.com/openeducat" target="_blank">
+                                    <i class=""></i>
+                                </a>
+                                <a href="" target="_blank">
+                                    <i class="fa fa-google-plus fa-1x img-circle"></i>
+                                </a>
+                                <a href="" target="_blank">
+                                    <i class="fa fa-github fa-1x img-circle"></i>
+                                </a>
+                            </div>
+                        </nav>
+                        <div id="company_details">
+                            <i class="fa fa-phone pr8" />
+                            <span class="company-info pr8">+1 555 123 8069</span>
+                            <i class="fa fa-envelope pr8" />
+                            <span class="company-info">info@example.com</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    <data>
+        <template id="fav_ico" name="educat Icon" inherit_id="web.layout">
+            <xpath expr="//html/head/title" position="replace">
+                <title>MarconEdu</title>
+            </xpath>
+        </template>
+
+        <template id="fav_ico" name="educat Icon" inherit_id="web.layout">
+            <xpath expr="//html/head/link[1]" position="replace">
+                <link rel="shortcut icon"
+                      href=""
+                      type="image/x-icon" />
+            </xpath>
+        </template>
+    </data>
+
+    <!-- Openeducat Menu -->
+    <menuitem id="openeducat_core.menu_op_school_root"
+              name="School Management"
+              sequence="10"
+           />
+
+<!--
+
+Organize me #TODO: get the parts u need and discard others! by@Reem
+
+
+
+-->
+<!--<data noupdate="1">-->
+<!--        <template name="Homepage" priority="29" t-name="website.homepage">-->
+<!--            <t t-call="website.layout">-->
+<!--                <div id="wrap" class="oe_structure oe_empty">-->
+<!--                    <div class="carousel slide mb0" id="myCarousel0" style="height: 344px; overflow: hidden;">-->
+<!--                        <ol class="carousel-indicators hidden">-->
+<!--                            <li class="active" data-slide-to="0" data-target="#myCarousel0"/>-->
+<!--                        </ol>-->
+<!--                        <div class="carousel-inner">-->
+<!--                            <div class="item oe_img_bg active"-->
+<!--                                 style="background-image: url(/openeducat_core/static/src/img/banner.jpg);">-->
+<!--                                <div class="container">-->
+<!--                                    <div class="row content">-->
+<!--                                        <div class="carousel-content col-md-6 col-sm-12" style="background: #4D4D4D; opacity: 0.7;">-->
+<!--                                            <h4>If you have any further questions visit our forum</h4>-->
+<!--                                            <p><a class="btn btn-primary btn-lg" href="http://www.openeducat.org/forum/">Ask a Question</a></p>-->
+<!--                                        </div>-->
+<!--                                        <div class="carousel-img col-md-6 hidden-sm hidden-xs">-->
+<!--                                            <img alt="OpenEducat Demo"-->
+<!--                                                 class="img-responsive"-->
+<!--                                                 src="/openeducat_core/static/src/img/openeducat_logo_demo.png"-->
+<!--                                                 style="-webkit-animation-play-state: paused; -webkit-transition: none; transition: none; -webkit-transform: translateX(3.2%) translateY(0.6%); transform: translateX(3.2%) translateY(0.6%);"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="carousel-control left hidden"-->
+<!--                             data-slide="prev" data-target="#myCarousel0"-->
+<!--                             href="#myCarousel0" style="width: 10%">-->
+<!--                            <i class="fa fa-chevron-left"/>-->
+<!--                        </div>-->
+<!--                        <div class="carousel-control right hidden"-->
+<!--                             data-slide="next" data-target="#myCarousel0"-->
+<!--                             href="#myCarousel0" style="width: 10%">-->
+<!--                            <i class="fa fa-chevron-right"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <section class="mt16 mb0 para_large" style="padding-bottom: 47px;">-->
+<!--                        <div class="container">-->
+<!--                            <div class="row">-->
+<!--                                <h1 style="text-align: center;"><strong>OpenEduCat</strong></h1>-->
+<!--                                <p style="text-align: justify;">A fully open source ERP system for educational institute, for efficient management of students, faculties, courses and classes keeping a collaborative platform.</p>-->
+<!--                                <p style="text-align: justify;"><br/>Based on best of class enterprise level architecture make <strong>OpenEduCat</strong> ready to use in environments like local infrastructure or a highly scalable cloud environment.</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    <section>-->
+<!--                        <div class="container-fluid highlight">-->
+<!--                            <div class="row mb32 mt16">-->
+<!--                                <h2 class="text-center">OpenEduCat<strong>Features</strong></h2>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section core &ndash;&gt;-->
+<!--                    <div class="container-fluid text-center">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-3 x-inver-box">-->
+<!--                                <div class="font-white d-link">-->
+<!--                                    <i class="fa fa-life-ring fa-4x hvr-pulse-grow "/><h2>Core</h2>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="col-md-9">-->
+<!--                                <div class="col-md-4 mt32">-->
+<!--                                    <a href="https://www.openeducat.org/page/features/student" target="_blank"><span class="fa fa-child fa-4x hvr-grow"/><h4>Student</h4></a>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 mt32">-->
+<!--                                    <a href="https://www.openeducat.org/page/features/faculty" target="_blank"><span class="fa fa-users fa-4x hvr-grow"/><h4>Faculty</h4></a>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 mt32">-->
+<!--                                    <a href="https://www.openeducat.org/page/features/course" target="_blank"><span class="fa fa-leanpub fa-4x hvr-grow"/><h4>Course</h4></a>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 mt32">-->
+<!--                                    <a href="https://www.openeducat.org/page/features/enrollment" target="_blank"><span class="fa fa-check-square-o fa-4x hvr-grow"/><h4>Enrollment</h4></a>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 mt32">-->
+<!--                                    <a href="https://www.openeducat.org/page/features/exam" target="_blank"><span class="fa fa-pencil fa-4x hvr-grow"/><h4>Exam</h4></a>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-4 mt32">-->
+<!--                                    <a href="https://www.openeducat.org/page/features/financial" target="_blank"><span class="fa fa-money fa-4x hvr-grow"/><h4>Financial</h4></a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; section core end &ndash;&gt;-->
+<!--                    &lt;!&ndash; section Essential start &ndash;&gt;-->
+<!--                    <section class="offwhite">-->
+<!--                        <div class="container-fluid text-center">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-3 inver-box">-->
+<!--                                    <div class="font-invert d-link">-->
+<!--                                        <i class="fa fa-briefcase fa-4x hvr-pulse-grow"/><h2>Essential</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-9">-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/application" target="_blank"><span class="fa fa-pencil-square-o fa-4x hvr-grow"/><h4>Application</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/payment" target="_blank"><span class="fa fa-usd fa-4x hvr-grow"/><h4>Payment</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/classroom" target="_blank"><span class="fa fa-university fa-4x hvr-grow"/><h4>Class Room</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/timetable" target="_blank"><span class="fa fa-calendar fa-4x hvr-grow"/><h4>Time Table</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/attendance" target="_blank"><span class="fa fa-hand-o-up fa-4x hvr-grow"/><h4>Attendance</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/assignment" target="_blank"><span class="fa fa-file-text-o fa-4x hvr-grow"/><h4>Assignment</h4></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section Essential end &ndash;&gt;-->
+<!--                    &lt;!&ndash; section Advance start &ndash;&gt;-->
+<!--                    <section>-->
+<!--                        <div class="container-fluid text-center">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-3 x-inver-box">-->
+<!--                                    <div class="font-white d-link">-->
+<!--                                        <i class="fa fa-space-shuttle fa-4x hvr-pulse-grow"/><h2>Advance</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-9">-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/library" target="_blank"><span class="fa fa-book fa-4x hvr-grow"/><h4>Library</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/results" target="_blank"><span class="fa fa-line-chart fa-4x hvr-grow"/><h4>Results</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/events" target="_blank"><span class="fa fa-flag fa-4x hvr-grow"/><h4>Events</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/dashboard" target="_blank"><span class="fa fa-tachometer fa-4x hvr-grow"/><h4>Dashboard</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/reporting" target="_blank"><span class="fa fa-pie-chart fa-4x hvr-grow"/><h4>Reporting</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/mobile-application" target="_blank"><span class="fa fa-mobile fa-4x hvr-grow"/><h4>Mobile Application</h4></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section Advance end &ndash;&gt;-->
+<!--                    &lt;!&ndash; section Manage Better start &ndash;&gt;-->
+<!--                    <section class="offwhite">-->
+<!--                        <div class="container-fluid text-center">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-3 inver-box">-->
+<!--                                    <div class="font-invert d-link">-->
+<!--                                        <i class="fa fa-sliders fa-4x hvr-pulse-grow"/><h2>Manage Better</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-9">-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/hostel" target="_blank"><span class="fa fa-building-o fa-4x hvr-grow"/><h4>Hostel</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/canteen" target="_blank"><span class="fa fa-cutlery fa-4x hvr-grow"/><h4>Canteen</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/transportation" target="_blank"><span class="fa fa-bus fa-4x hvr-grow"/><h4>Transportation</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/facility" target="_blank"><span class="fa fa-leaf fa-4x hvr-grow"/><h4>Facility</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/placement" target="_blank"><span class="fa fa-graduation-cap fa-4x hvr-grow"/><h4>Placement</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/parentlogin" target="_blank"><span class="fa fa-user fa-4x hvr-grow"/><h4>Parent Login</h4></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section Manage Better end &ndash;&gt;-->
+<!--                    &lt;!&ndash; section Communicate and Collaborate start &ndash;&gt;-->
+<!--                    <section>-->
+<!--                        <div class="container-fluid text-center">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-3 x-inver-box">-->
+<!--                                    <div class="font-white d-link">-->
+<!--                                        <i class="fa fa-phone fa-4x hvr-pulse-grow"/><h2>Communicate and Collaborate</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-9">-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/forum" target="_blank"><span class="fa fa-question fa-4x hvr-grow"/><h4>Forum</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/survey" target="_blank"><span class="fa fa-list-alt fa-4x hvr-grow"/><h4>Survey</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/discussion" target="_blank"><span class="fa fa-comments-o fa-4x hvr-grow"/><h4>Discussion</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/news" target="_blank"><span class="fa fa-newspaper-o fa-4x hvr-grow"/><h4>News Portal</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/poll" target="_blank"><span class="fa fa-bar-chart fa-4x hvr-grow"/><h4>Poll</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/blog" target="_blank"><span class="fa fa-bullhorn fa-4x hvr-grow"/><h4>Blog</h4></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section Communicate and Collaborate end &ndash;&gt;-->
+<!--                    &lt;!&ndash; section Enterprise Level ERP start &ndash;&gt;-->
+<!--                    <section class="offwhite">-->
+<!--                        <div class="container-fluid text-center">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-3 inver-box">-->
+<!--                                    <div class="font-invert d-link">-->
+<!--                                        <i class="fa fa-level-up fa-4x hvr-pulse-grow"/><h2>Enterprise Level ERP</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-9">-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/accounting" target="_blank"><span class="fa fa-money fa-4x hvr-grow"/><h4>Accounting</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/sales" target="_blank"><span class="fa fa-area-chart fa-4x hvr-grow"/><h4>Sales</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/payroll" target="_blank"><span class="fa fa-credit-card fa-4x hvr-grow"/><h4>Payroll</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/purchase" target="_blank"><span class="fa fa-cart-arrow-down fa-4x hvr-grow"/><h4>Purchase</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/stock" target="_blank"><span class="fa fa-gears fa-4x hvr-grow"/><h4>Stock</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/crm" target="_blank"><span class="fa fa-male fa-4x hvr-grow"/><h4>CRM</h4></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section Enterprise Level ERP end &ndash;&gt;-->
+<!--                    &lt;!&ndash; section Technical Features start &ndash;&gt;-->
+<!--                    <section>-->
+<!--                        <div class="container-fluid text-center">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-3 x-inver-box">-->
+<!--                                    <div class="font-white d-link">-->
+<!--                                        <i class="fa fa-code fa-4x hvr-pulse-grow"/> <h2>Technical</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-9">-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/full-web-based" target="_blank"><span class="fa fa-globe fa-4x hvr-grow"/><h4>Full Web Based</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/open-source" target="_blank"><span class="fa fa-circle-o-notch fa-4x hvr-grow"/><h4>Open Source</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/modular" target="_blank"><span class="fa fa-puzzle-piece fa-4x hvr-grow"/><h4>Modular</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/on-cloud-on-premise" target="_blank"><span class="fa fa-cloud-download fa-4x hvr-grow"/><h4>On Cloud On Premise</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/customizable" target="_blank"><span class="fa fa-wrench fa-4x hvr-grow"/><h4>Customizable</h4></a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4 mt32 mb50">-->
+<!--                                        <a href="https://www.openeducat.org/page/features/secure" target="_blank"><span class="fa fa-shield fa-4x hvr-grow"/><h4>Secure</h4></a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                    &lt;!&ndash; section Technical Features end &ndash;&gt;-->
+<!--                    <section class="jumbotron mb0"-->
+<!--                             style="background-color: #74746B; margin-top: -4px;">-->
+<!--                        <div class="container">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-md-9 text-muted">-->
+<!--                                    <p class="mb0">-->
+<!--                                        <span style="color:#FFFFFF;">Let us know if you have any specific inquiries about OpenEduCat, or if you have any comments regarding anything, or even if you just want to say “Hi”.</span>-->
+<!--                                    </p>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-3">-->
+<!--                                    <a class="btn btn-primary btn-lg pull-right mt8" href="http://www.openeducat.org/page/website.contactus"><i class="fa fa-arrow-right"/>Contact Us Now</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </section>-->
+<!--                </div>-->
+<!--            </t>-->
+<!--        </template>-->
+<!--    </data>-->
+</odoo>

@@ -1,0 +1,128 @@
+<odoo>
+    <record id="academic_calendar_tree_view" model="ir.ui.view">
+        <field name="name">academic.calender.tree</field>
+        <field name="model">academic.calender</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="school_year" />
+            </tree>
+        </field>
+    </record>
+
+        <record id="academic_calendar_search_view" model="ir.ui.view">
+        <field name="name">academic.calender.search</field>
+        <field name="model">academic.calender</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="school_year" />
+            </search>
+        </field>
+    </record>
+
+    <record id="academic_calendar_form_view" model="ir.ui.view">
+        <field name="name">academic.calender.form</field>
+        <field name="model">academic.calender</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="school_year" required="1"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <group string="Calender">
+                        <field name="line_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="date_from" required="1"/>
+                                <field name="date_to" required="1"/>
+                                <field name="entry" required="1"/>
+                                <field name="entry_type" />
+
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="academic_calendar_action" model="ir.actions.act_window">
+        <field name="name">Academic Calender</field>
+        <field name="res_model">academic.calender</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new school calender
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_academic_calendar_submenu" name="Academic Calendar"
+              sequence="30"
+              parent="openeducat_core.menu_op_school_root"/>
+
+    <menuitem id="menu_academic_calendar_action" name="Academic Calendar"
+              sequence="10"
+              parent="menu_academic_calendar_submenu"
+              action="academic_calendar_action"/>
+
+
+    <!--
+
+
+     -->
+
+    <record id="academic_calendar_view_calendar" model="ir.ui.view">
+        <field name="name">>academic.calender.line.view.calendar</field>
+        <field name="model">academic.calender.line</field>
+        <field name="arch" type="xml">
+            <calendar string="Entry"
+                      date_start="date_from"
+                      date_stop="date_to"
+                      mode="month"
+                      quick_add="True" color="entry_type">
+<!--                <field name="calender_id" />-->
+                <field name="entry"/>
+                <field name="entry_type"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="academic_calendar_line_tree_view" model="ir.ui.view">
+        <field name="name">academic.calender.line.tree</field>
+        <field name="model">academic.calender.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="calender_id" />
+                <field name="date_from" />
+                <field name="date_to" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="academic_calendar_line_action" model="ir.actions.act_window">
+        <field name="name">Calender Entries</field>
+        <field name="res_model">academic.calender.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,calendar</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new school calender entry
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_aacademic_calendar_line_action" name="Calender Entries"
+              sequence="20"
+              parent="menu_academic_calendar_submenu"
+              action="academic_calendar_line_action"/>
+
+
+
+
+
+</odoo>

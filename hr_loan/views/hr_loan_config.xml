@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_loan_config" model="ir.ui.view">
+            <field name="name">Loans  settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <h2 groups="account.group_account_user">Loan Approval</h2>
+                    <div class="row mt16 o_settings_container" id="loan_approval">
+                        <div class="col-xs-12 col-md-6 o_setting_box"
+                             title="Allows you to Add approval to loan request.">
+                            <div class="o_setting_left_pane">
+                                <field name="loan_gm_approve" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="GM Approval" for="loan_gm_approve"/>
+                                <div class="text-muted">
+                                    Enable Approval from General Manager
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_loan.action_loan_config_settings" model="ir.actions.act_window">
+            <field name="name">Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_id" ref="hr_loan.view_hr_loan_config"/>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module' : 'hr_loan'}</field>
+        </record>
+        <menuitem name="Configuration"
+                  id="menu_base_hr_loan_configuration"
+                  parent = "hr_loan.menu_hr_loans_and_advances"
+                  sequence="1"/>
+
+        <menuitem name="Configuration"
+                  id="menu_base_hr_loan_config_action"
+                  parent = "hr_loan.menu_base_hr_loan_configuration"
+                  action="hr_loan.action_loan_config_settings"
+                  sequence="1"/>
+
+
+    </data>
+</odoo>

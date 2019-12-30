@@ -1,0 +1,8 @@
+<odoo>
+    <menuitem id="openeducat_core.menu_op_general_main"
+              name="General"
+              parent="openeducat_core.menu_op_school_root"
+              sequence="30"
+              groups="base.group_no_one"/>
+
+</odoo>

@@ -1,0 +1,16 @@
+<odoo>
+
+    <record id="op_classroom_form_inherit_floor" model="ir.ui.view">
+        <field name="name">op.classroom.form.inherit.seq</field>
+        <field name="model">op.classroom</field>
+        <field name="inherit_id" ref="openeducat_classroom.view_op_classroom_form" />
+        <field name="arch" type="xml">
+            <field name="code" position="after" >
+                <field name="floor"  />
+            </field>
+              <field name="batch_id" position="attributes" >
+                <attribute name="required">0</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

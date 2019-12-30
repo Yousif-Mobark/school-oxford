@@ -1,0 +1,29 @@
+<odoo>
+    <record id="hr_contract_leave_days" model="ir.ui.view">
+        <field name="name">hr.contract.leave.days .inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <field name="resource_calendar_id" position="after">
+                <field name="leave_days" />
+            </field>
+        </field>
+    </record>
+    <record id="view_employee_form_inherit_leave" model="ir.ui.view">
+        <field name="name">view.employee.form.inherit.leave</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_holidays.view_employee_form_leave_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='active_group']" position="after">
+                <group string="Leaves" groups="base.group_no_one">
+                    <label for="remaining_leaves"/>
+                    <div>
+                        <field name="remaining_leaves" readonly ="0" class="oe_inline"/> days
+                    </div>
+                    <field name="start_date" required="1" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

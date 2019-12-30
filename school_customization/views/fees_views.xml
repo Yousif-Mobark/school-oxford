@@ -1,0 +1,124 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="school_fees_tree_view" >
+            <field name="name">school.fees.tree</field>
+            <field name="model">school.fees</field>
+            <field name="arch" type="xml">
+                <tree string="School Fees">
+                    <field name="year_id"/>
+                    <field name="category" />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="school_fees_form_view" model="ir.ui.view">
+            <field name="name">school.fees.form</field>
+            <field name="model">school.fees</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group>
+                            <group name="basic_info">
+                                <field name="name" readonly="1" />
+                                <field name="year_id" required="1"/>
+                                <field name="category" required="1"/>
+
+                            </group>
+                            <group>
+
+                            </group>
+
+                        </group>
+                        <group>
+                            <field name="lines" >
+                                <tree editable="top">
+                                    <field name="course_id" />
+                                    <field name="reg_fees" />
+                                    <field name="book_fees" />
+                                    <field name="school_fees" />
+                                    <field name="activity_fees" />
+                                    <field name="product_id" />
+                                    <field name="fees" />
+                                </tree>
+                            </field>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="school_fees_search_view" >
+            <field name="name">school.fees.search</field>
+            <field name="model">school.fees</field>
+            <field name="arch" type="xml">
+                <search string="School Fees">
+                    <field name="year_id"/>
+                    <field name="category" />
+                </search>
+            </field>
+        </record>
+
+
+        <record id="school_fees_action" model="ir.actions.act_window">
+            <field name="name">School Fees</field>
+            <field name="res_model">school.fees</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new Year Fee
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_school_fees_action" name="School Fees"
+                  sequence="10"
+                  parent="menu_op_fees_submenu"
+                  action="school_fees_action"/>
+
+        <!--
+
+
+
+
+        -->
+
+        <record model="ir.ui.view" id="school_fees_lines_tree_view" >
+            <field name="name">school.fees.lines.tree</field>
+            <field name="model">school.fee.line</field>
+            <field name="arch" type="xml">
+                <tree string="School Fees Details">
+                    <field name="course_id"/>
+                    <field name="fees" />
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record id="school_fees_details_action" model="ir.actions.act_window">
+            <field name="name">School Fees Details</field>
+            <field name="res_model">school.fee.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new Fee details
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_school_fees_details_action" name="School Fees Details"
+                  sequence="10"
+                  parent="menu_op_fees_submenu"
+                  action="school_fees_details_action"/>
+    </data>
+</odoo>

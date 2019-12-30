@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- check Bonce Sequence -->
+        <record id="bonce_no" model="ir.sequence">
+            <field name="name">Bonc No.</field>
+            <field name="code">bonce.no</field>
+            <field name="prefix">Bonce/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+
+         <!-- check penalties Sequence -->
+        <record id="penalties_no" model="ir.sequence">
+            <field name="name">Penalties No.</field>
+            <field name="code">penalties.no</field>
+            <field name="prefix">Penalties/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">no_gap</field>
+        </record>
+    </data>
+</openerp>

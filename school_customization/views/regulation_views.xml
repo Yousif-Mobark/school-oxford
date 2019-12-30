@@ -1,0 +1,154 @@
+<odoo>
+    <record id="school_regulation_tree_view" model="ir.ui.view">
+        <field name="name">school.regulation.tree</field>
+        <field name="model">school.regulation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="date" />
+                <field name="regulation_type" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="school_regulation_form_view" model="ir.ui.view">
+        <field name="name">school.regulation.form</field>
+        <field name="model">school.regulation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="date" required="1"/>
+                        </group>
+                        <group>
+                            <field name="regulation_type" required="1"/>
+                        </group>
+                    </group>
+                    <group string="Regulations">
+                        <field name="line_ids">
+                            <tree editable="top">
+                                <field name="sequence" widget="handle"/>
+                                <field name="description" required="1"/>
+                            </tree>
+                        </field>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="school_regulation_action" model="ir.actions.act_window">
+        <field name="name">School Regulations</field>
+        <field name="res_model">school.regulation</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new school regulation
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_school_regulation_submenu" name="School Regulations"
+              sequence="50"
+              parent="openeducat_core.menu_op_school_config"/>
+
+    <menuitem id="menu_school_regulation_action" name="School Regulations"
+              sequence="10"
+              parent="menu_school_regulation_submenu"
+              action="school_regulation_action"/>
+
+    <!-- PDFs -->
+
+    <record id="regulation_pdf_form_view" model="ir.ui.view">
+        <field name="name">academic.regulation.frame.form</field>
+        <field name="model">academic.regulation.frame</field>
+        <field name="arch" type="xml">
+            <form string="Academic Regulations" version="7.0"  create="false">
+                <center>
+                    <iframe
+                            src="/school_customization/static/regulations/academic.pdf"
+                            marginwidth="0"
+                            marginheight="0" frameborder="no"
+                            style="height: 600px; width: 100%; border-width:0px;">
+                    </iframe>
+                </center>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="academic_regulation_pdf_action" model="ir.actions.act_window">
+        <field name="name">Academic Regulations</field>
+        <field name="res_model">academic.regulation.frame</field>
+        <field name="view_type">form</field>
+        <field name="context">{}</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+
+                Add a new timetable
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_regulation_pdf_submenu"
+              name="Academic Regulations"
+              sequence="50"
+              parent="openeducat_core.menu_op_student_root"
+              action="academic_regulation_pdf_action"
+              groups="openeducat_core.group_op_student"/>
+
+
+
+    <record id="policy_pdf_form_view" model="ir.ui.view">
+        <field name="name">hr.policy.frame.form</field>
+        <field name="model">hr.policy.frame</field>
+        <field name="arch" type="xml">
+            <form string="HR Policies" version="7.0"  create="false">
+                <center>
+                    <iframe
+                            src="/school_customization/static/regulations/policy.pdf"
+                            marginwidth="0"
+                            marginheight="0" frameborder="no"
+                            style="height: 600px; width: 100%; border-width:0px;">
+                    </iframe>
+                </center>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="hr_policy_pdf_action" model="ir.actions.act_window">
+        <field name="name">HR Policy</field>
+        <field name="res_model">hr.policy.frame</field>
+        <field name="view_type">form</field>
+        <field name="context">{}</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+
+                Add a new policy
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_policy_pdf_submenu"
+              name="HR Policies"
+              sequence="50"
+              parent="hr.menu_hr_root"
+              action="hr_policy_pdf_action"
+              />
+
+
+
+
+</odoo>

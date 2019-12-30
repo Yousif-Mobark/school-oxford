@@ -1,0 +1,21 @@
+<odoo>
+    <!-- form view -->
+    <record id="op_batch_form_inherit_year" model="ir.ui.view">
+        <field name="name">op.batch.form.inherit.year</field>
+        <field name="model">op.batch</field>
+        <field name="inherit_id" ref="openeducat_core.view_op_batch_form" />
+        <field name="arch" type="xml">
+            <field name="start_date" position="replace">
+            </field>
+            <field name="end_date" position="replace">
+            </field>
+            <field name="code" position="attributes">
+                <attribute name="required">0</attribute>
+            </field>
+            <field name="course_id" position="after">
+                <field name="year_id"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

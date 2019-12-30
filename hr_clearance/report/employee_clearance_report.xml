@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="action_employee_clearance_report" 
+            name="hr_clearance.report_employee_clearance" 
+            file="hr_clearance.report_employee_clearance"
+            model="hr.clearance" 
+            report_type="qweb-pdf"
+            string="employee clearance report" 
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- sequence order
+                basic, allowance        1-99
+                Gross                   100
+                regular deductions      101-199
+                Net                     200
+                incentive               300
+                incentive deductions    301-349
+                incentive Additions     350-399
+                deposit in bank         400
+
+        -->
+        <record id="SOCIAL" model="hr.salary.rule.category">
+            <field name="name">Social </field>
+            <field name="code">SOCIAL</field>
+        </record>
+        <record id="INCENTIVE" model="hr.salary.rule.category">
+            <field name="name">Incentive </field>
+            <field name="code">INCENTIVE</field>
+        </record>
+        <record id="INCDED" model="hr.salary.rule.category">
+            <field name="name">Incentive Deduction </field>
+            <field name="code">INCDED</field>
+        </record>
+        <record id="INCADD" model="hr.salary.rule.category">
+            <field name="name">Incentive Addition </field>
+            <field name="code">INCADD</field>
+        </record>
+        <record id="DEPOSIT" model="hr.salary.rule.category">
+            <field name="name">Deposit in Bank </field>
+            <field name="code">DEPOSIT</field>
+        </record>
+
+        <!-- Basic 0.38.5% (1)-->
+        <record id="hr_payroll.hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Basic Salary</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.wage * 0.385</field>
+        </record>
+
+        <!-- COLA 23% (2)-->
+        <record id="hr_salary_rule_cola" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">COLA</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">cola</field>
+            <field name="short_name">cola</field>
+            <field name="sequence" eval="2"/>
+            <field name="amount_python_compute">result = contract.wage * 0.23</field>
+        </record>
+
+        <!-- Accommodation 20.5% (3)-->
+        <record id="hr_salary_rule_accommodation" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">ACC</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Accommodation</field>
+            <field name="short_name">Accommodation</field>
+            <field name="sequence" eval="3"/>
+            <field name="amount_python_compute">result = contract.wage * 0.205</field>
+        </record>
+
+        <!-- Transportation 18% (4)-->
+        <record id="hr_salary_rule_transportation" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">TRANS</field>
+            <field name="category_id" ref="hr_payroll.ALW"/>
+            <field name="name">Transportation</field>
+            <field name="short_name">Transportation</field>
+            <field name="sequence" eval="4"/>
+            <field name="amount_python_compute">result = contract.wage * 0.18</field>
+        </record>
+
+        <!--  deductions   -->
+
+        <!--Social insurance 8% (101) -->
+        <record id="hr_salary_rule_si_8" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">SI8</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Social Insurance</field>
+            <field name="short_name">Social 8%</field>
+            <field name="sequence" eval="101"/>
+            <field name="amount_python_compute">result = (contract.wage * 8)/100
+if worked_days.Unpaid:
+    result = (result * worked_days.WORK100.number_of_days)/(worked_days.WORK100.number_of_days + worked_days.Unpaid.number_of_days)</field>
+        </record>
+
+        <!--Social insurance 17% (102) -->
+        <record id="hr_salary_rule_si_17" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">SI17</field>
+            <field name="category_id" ref="SOCIAL"/>
+            <field name="name">Social Insurance 17%</field>
+            <field name="short_name">Social 17%</field>
+            <field name="sequence" eval="102"/>
+            <field name="appears_on_payslip" eval="0"/>
+            <field name="amount_python_compute">result = (contract.wage * 17)/100
+if worked_days.Unpaid:
+    result = (result * worked_days.WORK100.number_of_days)/(worked_days.WORK100.number_of_days + worked_days.Unpaid.number_of_days)</field>
+            <field name="appears_on_archive" eval="1"/>
+        </record>
+
+        <!--Income Tax  (103) -->
+        <record id="hr_salary_rule_income_tax" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">TAX</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Income Tax</field>
+            <field name="short_name">ax</field>
+            <field name="sequence" eval="103"/>
+            <field name="amount_python_compute">result = (contract.wage - ( SI8 + 1200 + 120 )) *  0.15  + 3
+result = result if result >= 0 else 0
+if worked_days.Unpaid:
+    result = (result * worked_days.WORK100.number_of_days)/(worked_days.WORK100.number_of_days + worked_days.Unpaid.number_of_days)</field>
+            <field name="appears_on_payslip" eval="1"/>
+            <field name="appears_on_archive" eval="1"/>
+        </record>
+
+
+        <!-- incentive (300) -->
+        <record id="hr_rule_incentive" model="hr.salary.rule">
+            <field name="name">Incentive</field>
+            <field name="sequence" eval="200"/>
+            <field name="code">INCEN</field>
+            <field name="category_id" ref="INCENTIVE"/>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = contract.full_wage - contract.wage</field>
+        </record>
+
+        <!-- incentive deductions  -->
+        <!-- (301) reserved for loans -->
+
+        <!-- under/over time adjustment (302)-->
+        <record id="hr_rule_monthly_adjust" model="hr.salary.rule">
+            <field name="code">UT/OT</field>
+            <field name="name">Under/Over Time</field>
+            <field name="category_id" ref="hr_payroll_customize.INCDED"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result =(inputs.CLASS and inputs.ACTCLASS and inputs.CLASS.amount) and  ((inputs.ACTCLASS.amount - inputs.CLASS.amount) * (contract.wage /  inputs.CLASS.amount))</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="sequence" eval="302"/>
+        </record>
+
+        <!-- manual adjustment (303)-->
+        <record id="hr_rule_manual_adjustment" model="hr.salary.rule">
+            <field name="code">MAN-ADJ</field>
+            <field name="name">Manual Adjustment</field>
+            <field name="category_id" ref="hr_payroll_customize.INCDED"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = inputs.MANADJ and inputs.MANADJ.amount</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="sequence" eval="303"/>
+        </record>
+
+        <!-- Monthly Classes-->
+         <record id="hr_rule_input_classes" model="hr.rule.input">
+            <field name="code">CLASS</field>
+            <field name="name">classes/Month</field>
+            <field name="input_id" ref="hr_rule_monthly_adjust"/>
+        </record>
+        <record id="hr_rule_input_actual_classes" model="hr.rule.input">
+            <field name="code">ACTCLASS</field>
+            <field name="name">Actual classes</field>
+            <field name="input_id" ref="hr_rule_monthly_adjust"/>
+        </record>
+        <!-- manual adjustment  -->
+        <record id="hr_rule_input_manual_adjustment" model="hr.rule.input">
+            <field name="code">MANADJ</field>
+            <field name="name">Manual Adjustment</field>
+            <field name="input_id" ref="hr_rule_manual_adjustment"/>
+        </record>
+
+
+        <!-- deposit in bank (400)-->
+        <record id="hr_salary_rule_deposit" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="code">BANK</field>
+            <field name="category_id" ref="DEPOSIT"/>
+            <field name="name">Deposit IN Bank</field>
+            <field name="short_name">Deposit</field>
+            <field name="sequence" eval="400"/>
+            <field name="amount_python_compute">result =  NET + INCEN  + categories.INCDED</field>
+            <field name="appears_on_payslip" eval="1"/>
+        </record>
+
+
+        <!--
+
+                Salary Structure
+
+                -->
+
+        <record id="school_structure_base" model="hr.payroll.structure">
+            <field name="code">SCHOOL</field>
+            <field name="name">School Salary Structure</field>
+            <field name="parent_id" eval="False"/>
+            <field eval="[(6, 0, [
+            ref('hr_payroll.hr_rule_basic'),
+            ref('hr_salary_rule_cola'),
+            ref('hr_salary_rule_accommodation'),
+            ref('hr_salary_rule_transportation'),
+            ref('hr_payroll.hr_rule_taxable'),
+            ref('hr_salary_rule_si_8'),
+            ref('hr_salary_rule_si_17'),
+            ref('hr_salary_rule_income_tax'),
+            ref('hr_payroll.hr_rule_net'),
+            ref('hr_rule_incentive'),
+            ref('hr_rule_monthly_adjust'),
+            ref('hr_rule_manual_adjustment'),
+            ref('hr_salary_rule_deposit'),
+
+            ])]"
+
+                   name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record>
+    </data>
+</odoo>

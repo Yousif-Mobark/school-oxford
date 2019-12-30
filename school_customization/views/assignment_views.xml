@@ -1,0 +1,16 @@
+<odoo>
+
+    <record id="view_op_assignment_form_inherit" model="ir.ui.view">
+        <field name="name">view.op.assignment.form.inherit</field>
+        <field name="model">op.assignment</field>
+        <field name="inherit_id" ref="openeducat_assignment.view_op_assignment_form" />
+        <field name="arch" type="xml">
+            <field name="batch_id" position="attributes" >
+                <attribute name="readonly">0</attribute>
+            </field>
+            <field name="faculty_id" position="attributes" >
+                <attribute name="readonly">0</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_access_categ" model="ir.module.category">
+        <field name="name">Leaves Management</field>
+    </record>
+
+    <!-- Group of manager -->
+    <record id="hr_leave_access_group" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="help">Leaves Manager</field>
+        <field name="category_id" ref="hr_leave_access_categ"/>
+    </record>
+</odoo>

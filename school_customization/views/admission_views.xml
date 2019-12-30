@@ -1,0 +1,295 @@
+<odoo>
+    <!-- form view -->
+    <record id="view_op_admission_form_inherit_names" model="ir.ui.view">
+        <field name="name">op.admission.forom.inherit.names</field>
+        <field name="model">op.admission</field>
+        <field name="inherit_id" ref="openeducat_admission.view_op_admission_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,admission,done" />
+
+            </xpath>
+            <xpath expr="//button[@name='submit_form']" position="replace">
+                <button string="Pay Registration" states="draft" class="oe_highlight"
+                        name="%(school_customization.act_register_invoice_action_view)d"  type="action"
+                        attrs="{'invisible': [('paid_reg', '=', True)]}"/>
+                <button string="Submit" states="draft" class="oe_highlight"
+                        type="object" name="submit_form"/>
+            </xpath>
+
+            <xpath expr="//form/sheet" position="replace">
+                <sheet>
+                    <!--                    <div class="oe_button_box" name="button_box">-->
+                    <!--                        <button class="oe_stat_button" name="action_view_invoice"  type="object" icon="fa-money" states="done">-->
+                    <!--                            &lt;!&ndash;                            <field string="Invoices" name="invoice_id" widget="statinfo" />&ndash;&gt;-->
+                    <!--                        </button>-->
+                    <!--                    </div>-->
+
+                    <div class="oe_title">
+                        <field name="is_student"/>
+                        <label for="student_id" string="Already Student"/>
+                        <field name="student_id" placeholder="Student" options="{'no_create_edit': True}"
+                               attrs="{'required':[('is_student','=',True)],'invisible': [('is_student','=', False)]}"/>
+                    </div>
+                    <field name="image" widget="image" class="oe_left oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <field name="name" placeholder="First Name" style="padding-right:10px"/>
+                                    </td>
+                                    <td>
+                                        <field name="middle_name" placeholder="Middle Name"
+                                               style="padding-right:10px" required="1"/>
+                                    </td>
+                                    <td>
+                                        <field name="third_name" placeholder="Third Name"
+                                               style="padding-right:10px"  required="1"/>
+                                    </td>
+                                    <td>
+                                        <field name="last_name" placeholder="Last Name" style="padding-right:10px"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h1>
+                        <h1>
+                            <table>
+                                <tr>
+                                    <td style="padding-right:10px;">
+                                        <field name="ar_last_name" placeholder="الاسم الاخير" required="1"/>
+                                    </td>
+                                    <td style="padding-right:10px;">
+                                        <field name="ar_third_name" placeholder=" الاسم الثالث" required="1"/>
+                                    </td>
+                                    <td style="padding-right:10px;">
+                                        <field name="ar_middle_name" placeholder="الاسم الثاني" required="1"/>
+                                    </td>
+                                    <td style="padding-right:10px;">
+                                        <field name="ar_first_name" required="1" placeholder="الاسم الاول"/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </h1>
+                    </div>
+                    <notebook colspan="4">
+                        <page name="personal_detail" string="Student Details">
+                            <group string="Personal Info" col="4" colspan="4">
+                                <field name="birth_date"/>
+                                <field name="place_of_birth" />
+                                <field name="gender"/>
+                                <field name="primary_lang"/>
+                                <field name="lang" attrs="{
+                            'invisible': [('primary_lang', '!=', 'other')],
+                            }" />
+                                <field name="nationality_id" />
+                                <field name="religion" />
+                                <field name="other_religion" attrs="{
+                            'invisible': [('religion', '!=', 'other')],
+                            }" />
+                            </group>
+                            <group string="ID" col="4" colspan="4">
+                                <field name="id_type"/>
+                                <field name="id_file" />
+                            </group>
+                            <group string="Contact Info" col="4" colspan="4">
+                                <field name="email" placeholder="Email" required="0"/>
+                                <field name="phone" placeholder="Phone" required="0"/>
+                                <field name="mobile" placeholder="Mobile"/>
+                                <label for="street" string="Address"/>
+                                <div>
+                                    <field name="street" placeholder="Street..."/>
+                                    <field name="street2"/>
+                                    <div class="address_format">
+                                        <field name="city" placeholder="City" style="width: 40%%"/>
+                                        <field name="state_id" options='{"no_open": True}'
+                                               placeholder="State" style="width: 24%%"/>
+                                        <field name="zip" placeholder="ZIP" style="width: 34%%"/>
+                                    </div>
+                                    <field name="country_id" placeholder="Country" options='{"no_open": True}'/>
+
+                                </div>
+                            </group>
+                            <group string="Education Details" col="4" colspan="4">
+                                <field name="prev_institute_id"/>
+                                <field name="prev_course_id"/>
+                                <field name="prev_result"/>
+                            </group>
+                        </page>
+                        <page name="admission_detail" string="Admission Detail">
+                            <group string="Admission" col="4" colspan="4">
+                                <field name="admission_type" required="1" />
+                                <field name="register_id" domain="[('state', 'in', ['application','admission'])]"
+                                       widget="selection"/>
+                                <field name="application_number"/>
+                                <field name="need_transportation" />
+                            </group>
+                            <group col="4" colspan="4">
+                                <field name="year_id" readonly="1"/>
+                                <field name="course_id"/>
+                                <field name="batch_id"
+                                       context="{'course_id': course_id,'get_parent_batch':1}" required="1"/>
+                                <field name="application_date"/>
+                                <field name="admission_date"/>
+                                <field name="fees_term_id" invisble="1" /> <!-- needed in backend-->
+                                <field name="fees" attrs="{'required': [('state','not in', ['draft', 'submit'])]}"/>
+                            </group>
+
+                        </page>
+                        <page name="fees_detail" string="Fees">
+                            <group string="Registration Fees">
+                                <div class="oe_title">
+                                    <h1>
+                                        <label for="remain_fees" string="Remaining"/>
+                                        <field name="remain_fees" readonly="1"/>
+
+                                    </h1>
+                                </div>
+                                <field name="paid_reg" />
+                                <field name="register_amount_paid" />
+                            </group>
+
+                            <group string="Fees">
+                                <div class="oe_title">
+                                    <h1>
+                                        <label for="fees" string="Fees"/>
+                                        <field name="fees" readonly="1"/>
+
+                                    </h1>
+                                </div>
+                                <div class="oe_title">
+
+                                    <h1>
+                                        <label for="actual_fees" string="Actual Fees"/>
+                                        <field name="actual_fees" readonly="1"/>
+
+                                    </h1>
+                                </div>
+                            </group>
+                            <group>
+                                <group string="Fees Details">
+                                    <field name="reg_fees" readonly="1"/>
+                                    <field name="book_fees" readonly="1"/>
+                                    <field name="school_fees" readonly="1"/>
+                                    <field name="activity_fees" readonly="1"/>
+                                </group>
+                                <group string="Discount Details">
+                                    <field name="discount_ids" widget="many2many_tags"/>
+                                    <field name="percentage_discount"/>
+                                    <field name="amount_discount" />
+                                    <br/>
+                                    <hr/>
+                                    <field name="actual_school_fees"/>
+                                    <!--                                <field name="actual_fees"/>-->
+
+                                </group>
+                            </group>
+                            <group>
+                                <field name="instalment_ids" widget="one2many_list">
+                                    <tree editable="bottom">
+                                        <field name="sequence"/>
+                                        <field name="amount" />
+                                        <field name="date" />
+                                        <field name="payment_type" />
+
+                                    </tree>
+                                </field>
+
+                            </group>
+                        </page>
+                        <page name="custody_detail" string="Parents &amp; Legal">
+                            <group string="Medical and Legal">
+                                <group>
+                                    <field name="restraining_order" />
+                                    <field name="guardian_name" />
+                                    <field name="guardian_relation" />
+                                    <field name="guardian_phone" />
+                                    <field name="nok_1" />
+                                    <field name="nok_2" />
+                                </group>
+                                <group>
+                                    <field name="blood_group" />
+                                    <field name="is_medical_issue" />
+                                    <field name="medical"  attrs="{'invisible': [('is_medical_issue','=', False)]}"/>
+                                </group>
+
+                            </group>
+                            <group string="Parents">
+                                <group>
+                                    <field name="mother_id" />
+                                </group>
+                                <group>
+                                    <field name="father_id" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_op_admission_register_form_inherit_dates" model="ir.ui.view">
+        <field name="name">view.op.admission.register.form.inherit.dates</field>
+        <field name="model">op.admission.register</field>
+        <field name="inherit_id" ref="openeducat_admission.view_op_admission_register_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="replace">
+                <field name="state" widget="statusbar" statusbar_visible="draft,admission,done" />
+
+            </xpath>
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="year_id" required="1" widget="selection"/>
+            </xpath>
+            <!--            <xpath expr="//field[@name='product_id']" position="replace">-->
+            <!--            </xpath>-->
+            <xpath expr="//field[@name='start_date']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='end_date']" position="replace">
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--
+
+     CHANGE MENU GROUPS
+
+     -->
+
+    <menuitem id="openeducat_admission.menu_op_admission_root" name="Admissions"
+              sequence="30"
+              web_icon="openeducat_admission,static/description/icon.png"/>
+
+    <menuitem id="openeducat_admission.menu_op_admission_submenu" name="Admissions"
+              sequence="10"
+              parent="openeducat_admission.menu_op_admission_root"/>
+
+    <menuitem id="openeducat_admission.menu_admission_register" name="Admission Registers"
+              sequence="10"
+              groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,group_op_registerer"
+              parent="openeducat_admission.menu_op_admission_submenu"
+              action="openeducat_admission.act_open_op_admission_register_view"/>
+
+    <menuitem id="openeducat_admission.menu_admission" name="Applications"
+              groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,group_op_registerer"
+              sequence="20"
+              parent="openeducat_admission.menu_op_admission_submenu"
+              action="openeducat_admission.act_open_op_admission_view"/>
+
+    <menuitem id="openeducat_admission.menu_admission_report_root" name="Reports"
+              sequence="50"
+              groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin,group_op_registerer"
+              parent="openeducat_admission.menu_op_admission_root"/>
+
+    <menuitem id="openeducat_admission.menu_admission_analysis" name="Admission Report"
+              sequence="30"
+              parent="openeducat_admission.menu_admission_report_root"
+              action="openeducat_admission.admission_analysis_act"/>
+
+    <menuitem id="openeducat_admission.menu_admission_analysis_report" name="Admission Analysis Report"
+              sequence="40"
+              parent="openeducat_admission.menu_admission_report_root"
+              action="openeducat_admission.act_open_op_admission_view_pivot"/>
+</odoo>

@@ -1,0 +1,37 @@
+<odoo>
+
+
+    <record id="view_parent_info_form_inherit" model="ir.ui.view">
+        <field name="name">view.parent.info.form.inherit</field>
+        <field name="model">op.parent</field>
+        <field name="inherit_id" ref="openeducat_parent.view_op_parent_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="replace">
+                <sheet>
+                    <group col="4">
+                        <field name="name" placeholder="Parent Name"/>
+                        <field name="user_id" readonly="1"/>
+                        <field name="mobile" required="0" readonly="0" widget="phone"/>
+                        <field name="email" readonly="0"/>
+                        <field name="country_id" />
+                        <field name="occupation" />
+                        <field name="address" />
+                    </group>
+                    <separator colspan="4" string="Student(s)"/>
+                    <field name="student_ids"/>
+                </sheet>
+            </xpath>
+        </field>
+    </record>
+    <!--
+
+     move menu to admission
+
+    -->
+    <menuitem id="openeducat_parent.menu_op_parent_root" name="Parents"
+              sequence="20"
+              parent="openeducat_admission.menu_op_admission_root"
+
+    />
+
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="action_employee_clearance_report" 
+            name="penalties_custom_12.report_penelty_violation" 
+            file="penalties_custom_12.report_penelty_violation"
+            model="hr.employee.penalties" 
+            report_type="qweb-pdf"
+            string="penelty violation report" 
+        />
+    </data>
+</odoo>

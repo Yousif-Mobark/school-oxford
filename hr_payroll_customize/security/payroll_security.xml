@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+
+        <record id="group_hr_payroll_account" model="res.groups">
+            <field name="name">Payroll Accountant</field>
+            <field name="category_id" ref="base.module_category_hr_payroll"/>
+            <field name="implied_ids" eval="[(4, ref('account.group_account_user')), (4, ref('hr_payroll.group_hr_payroll_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        </record>
+
+            <record id="hr_payslip_rule_account" model="ir.rule">
+                <field name="name">All Payslip</field>
+                <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+                <field name="domain_force">[(1,'=',1)]</field>
+                <field name="groups" eval="[(4, ref('group_hr_payroll_account'))]"/>
+            </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,217 @@
+<odoo>
+<!-- === HR Regulation Page === -->
+    <template id="hr_regulation_page_template">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <t t-if="docs">
+                        <h3><t t-esc="docs.name"/></h3>
+                        <t t-foreach="data_lines" t-as="o">
+                            <ul class="regulation" style="list-style-type:disc;">
+                                <li><strong><t t-esc="o.description"/></strong> </li>
+                            </ul>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <h3>No Regulations !!!</h3>
+                    </t>
+
+                    <!-- === Snippets' area === -->
+                    <div class="oe_structure" />
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="hr_regulation_page" model="website.page">
+        <field name="name">HR-Regulation</field>
+        <field name="url">/regulation/hr</field>
+        <field name="view_id" ref="hr_regulation_page_template"/>
+        <field name="website_indexed">True</field>
+        <field name="website_published">True</field>
+        <field name="website_id" ref="website.default_website"/>
+    </record>
+
+    <record id="menu_hr_regulation" model="website.menu">
+        <field name="name">HR-Reg</field>
+        <field name="url">/regulation/hr</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">10</field>
+    </record>
+
+    <!-- === Academic Regulation Page === -->
+    <template id="academic_regulation_page_template">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <t t-if="docs">
+                        <h3><t t-esc="docs.name"/></h3>
+                        <t t-foreach="data_lines" t-as="l">
+                            <ul class="regulation" style="list-style-type:disc;">
+                                <li><strong><t t-esc="l.description"/></strong> </li>
+                            </ul>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <h3>No Regulations !!!</h3>
+                    </t>
+
+                    <!-- === Snippets' area === -->
+                    <div class="oe_structure" />
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="academic_regulation_page" model="website.page">
+        <field name="name">Academic-Reg</field>
+        <field name="url">/regulation/academic</field>
+        <field name="view_id" ref="academic_regulation_page_template"/>
+        <field name="website_indexed">True</field>
+        <field name="website_published">True</field>
+        <field name="website_id" ref="website.default_website"/>
+    </record>
+
+    <record id="menu_academic_regulation" model="website.menu">
+        <field name="name">Academic-Reg</field>
+        <field name="url">/regulation/academic</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">11</field>
+    </record>
+
+
+    <!-- === OP Assignment Page === -->
+    <template id="op_assignment_page_template">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <t t-if="assignments">
+                        <t t-foreach="assignments" t-as="ass">
+                            <t t-set="ass_id" t-value="ass.id"/>
+                            <div class="assignment_container" style="border: solid black 1px; border-radius: 3px; padding:10px; margin:10px">
+                                <table>
+                                    <tr>
+                                        <th>Assignment:</th>
+                                        <td><t t-esc="ass.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Grade:</th>
+                                        <td><t t-esc="ass.course_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Subject:</th>
+                                        <td><t t-esc="ass.subject_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Issued Date:</th>
+                                        <td><t t-esc="ass.issued_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Submission Date:</th>
+                                        <td><t t-esc="ass.submission_date"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description:</th>
+                                        <td><t t-esc="ass.description"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Marks:</th>
+                                        <td><t t-esc="ass.marks"/></td>
+                                    </tr>
+                                </table>
+
+                                <div class="container">
+                                  <hr/>
+                                    <t t-if="not users_answer_list.get(ass_id)">
+                                    <form action="/assignment/answer" method="post" enctype="multipart/form-data"  data-success_page="/assignment/answer/success">
+                                        <a href="#myModal" role="button" class="btn btn-primary" data-toggle="modal">Push Answer</a>
+
+                                      <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                              <h3 id="myModalLabel">Assignment Submission</h3>
+                                            </div>
+                                            <div class="modal-body" id="myWizard">
+                                             <div class="tab-content">
+                                                 <input type="hidden" name="ass_id" t-att-value="ass.id" />
+                                                 <label>Description</label>
+                                                 <textarea class="form-control" name="desc" required="1"/>
+                                                 <label>Note</label>
+                                                 <textarea class="form-control" name="note"/>
+                                                 <br/>
+                                                 <p>
+                                                     <label>Attachment</label>
+                                                     <input type="file" name="file"/>
+                                                 </p>
+
+                                             </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button class="btn mb32" data-dismiss="modal" aria-hidden="false">Close</button>
+                                              <button type="submit" class="btn btn-primary float-right mb32 ">
+                                                Confirm
+                                                <span class="fa fa-long-arrow-right" />
+                                            </button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </form>
+                                    </t>
+                                    <t t-else="">
+                                        <p style="background: #33a19e; color: white; border-radius: 5px; padding:10px; text-align:center">Assignment is answered</p>
+                                    </t>
+                                </div>
+
+                            </div>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <h3>No Assignments For You !!!</h3>
+                    </t>
+
+                    <!-- === Snippets' area === -->
+                    <div class="oe_structure" />
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="op_assignment_page" model="website.page">
+        <field name="name">OP-Assignment</field>
+        <field name="url">/op/assignment</field>
+        <field name="view_id" ref="op_assignment_page_template"/>
+        <field name="website_indexed">True</field>
+        <field name="website_published">True</field>
+        <field name="website_id" ref="website.default_website"/>
+    </record>
+
+    <record id="menu_academic_op_assignment" model="website.menu">
+        <field name="name">OP-Assignment</field>
+        <field name="url">/op/assignment</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">12</field>
+    </record>
+
+    <template id="op_assignment_success_page_template">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container">
+                    <h3><t t-esc="message"/> </h3>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <record id="op_assignment_success_page" model="website.page">
+        <field name="name">OP-Assignment-Success</field>
+        <field name="url">/assignment/answer/success</field>
+        <field name="view_id" ref="op_assignment_success_page_template"/>
+        <field name="website_indexed">True</field>
+        <field name="website_published">True</field>
+        <field name="website_id" ref="website.default_website"/>
+    </record>
+
+</odoo>

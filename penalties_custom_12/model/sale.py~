@@ -1,0 +1,118 @@
+from odoo import models, fields, api, _
+from datetime import datetime
+from dateutil.relativedelta import *
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    job_order_id = fields.Many2one('job.order', string='Job Order')
+    Job_order_text = fields.Text(string="Job order Note")
+    service_type = fields.Char('Service Type')
+    pricelist_id = fields.Many2one('product.pricelist', string='Pricelist-' , required=False ,readonly=True,
+                                   states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},  invisible=True,
+                                   default=''
+                                   )
+
+    # @api.multi
+    # def action_confirm(self):
+    #     super().action_confirm()
+    #         for order in self.order_line:
+    #             self.picking_ids.move_lines.lot_id = order.lot_id
+    #
+    #
+    #     order_line_bom = self.env['sale.order.line'].search([('order_id', '=', self.id)])
+    #     stock_move_lines = self.env['stock.move']
+    #     created_stock_move_lines = self.env['stock.move']
+    #     vals = {}
+    #     # unit =self.env.ref('uom.product_uom_unit')
+    #     for order in self.order_id:
+    #             order.picking_ids.move_lines.state = 'draft'
+    #             for move_line in order.picking_ids.move_lines:
+    #                 move_line.unlink()
+    #                 for bom_line in order_line_bom:
+    #                     vals = {
+    #                         'product_id': bom_line.product_id.id,
+    #                         'product_uom': 2,
+    #                         'location_id': 1,
+    #                         'name': bom_line.product_id.name,
+    #                         'location_dest_id': 1,
+    #                         'lot_id' : bom_line.lot_id.id
+    #                     }
+    #                     created_stock_move_lines += stock_move_lines.create(vals)
+    #             # order.create(stock_move_lines)
+class ProductionLot(models.Model):
+    _inherit = "stock.production.lot"
+    unit_price = fields.Float('USD Unit Cost Price')
+
+
+
+
+class VendorBill(models.Model):
+    _inherit = 'account.invoice'
+
+    job_order_id = fields.Many2one('job.order', string='Job Order')
+    #service_type = fields.Char('Service Type')
+
+
+class stok_picking(models.Model):
+    _inherit = 'stock.picking'
+
+    @api.onchange('sale_id')
+    def get_manufac(self):
+        print('kljsf;ddffffffffffgdddddddddddddddddddddgd')
+        for rec in self.move_line:
+            rec.lot_id = self.sale_id.order_line.lot_id.id
+
+
+
+
+class StockMove(models.Model):
+    _inherit = "stock.move"
+
+    product_id = fields.Many2one(
+                'product.product', 'Part Number',
+                domain=[('type', 'in', ['product', 'consu'])], index=True, required=True,
+                states={'done': [('readonly', True)]})
+
+    lot_id = fields.Many2one('stock.production.lot', 'Manufacturer Part.NO',
+                                     help="Specify Lot/Serial Number to focus your inventory on a particular Lot/Serial Number.")
+
+    purchase_category_id = fields.Many2one('purchase.category', string='Purchase Category')
+    brand_id = fields.Many2one('parts.brands', 'Brand')
+    @api.model
+    def create(self,vals):
+        res = super(StockMove, self).create(vals)
+        # print('bb', self.sale_line_id.id)
+        if res.sale_line_id:
+            print('ff', res.sale_line_id.id)
+            res.lot_id = res.sale_line_id.lot_id.id
+        return res
+
+
+
+
+class StockMoveLine(models.Model):
+    _inherit = "stock.move.line"
+
+    lot_id = fields.Many2one('stock.production.lot', 'Manufactuer Part.NO',related='move_id.lot_id')
+    purchase_category_id = fields.Many2one('purchase.category', string='Purchase Category',related='move_id.purchase_category_id')
+    brand_id = fields.Many2one('parts.brands', 'Brand',related='move_id.brand_id')
+
+    @api.constrains('lot_id', 'product_id','brand_id')
+    def _check_lot_product(self):
+        return True
+
+
+# class Pricelist(models.Model):
+#     _inherit = 'product.pricelist.item'
+#
+#     price_discount_ne = fields.Float(string='Price_Discount',compute="price_discount_cou")
+#     @api.one
+#     @api.onchange('base')
+#     def price_discount_cou(self):
+#          self.price_discount_ne=30
+#
+#          # self.categ_id.standard_price
+
+
+

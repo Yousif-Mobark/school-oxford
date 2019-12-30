@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_adviser_payroll_structure,hr.payroll.structure.adviser,hr_payroll.model_hr_payroll_structure,group_hr_payroll_account,1,0,0,0
+access_hr_adviser_contribution_register,hr.contribution.register.adviser,hr_payroll.model_hr_contribution_register,group_hr_payroll_account,1,0,0,0
+access_hr_adviser_salary_rule_category,hr.salary.rule.category.adviser,hr_payroll.model_hr_salary_rule_category,group_hr_payroll_account,1,0,0,0
+access_hr_adviser_payslip,hr.payslip.adviser,hr_payroll.model_hr_payslip,group_hr_payroll_account,1,1,1,0
+access_hr_adviser_payslip_run,hr.payslip.run.adviser,hr_payroll.model_hr_payslip_run,group_hr_payroll_account,1,1,1,0
+access_hr_adviser_payslip_line,hr.payslip.line.adviser,hr_payroll.model_hr_payslip_line,group_hr_payroll_account,1,0,0,1
+access_hr_adviser_payslip_input,hr.payslip.input.adviser,hr_payroll.model_hr_payslip_input,group_hr_payroll_account,1,0,0,0
+access_hr_adviser_payslip_worked_days ,hr.payslip.worked_days.adviser,hr_payroll.model_hr_payslip_worked_days,group_hr_payroll_account,1,0,0,0
+access_hr_adviser_rule_input,hr.rule.input.adviser,hr_payroll.model_hr_rule_input,group_hr_payroll_account,1,0,0,0
+access_hr_adviser_salary_rule,hr.salary.rule.adviser,hr_payroll.model_hr_salary_rule,group_hr_payroll_account,1,1,0,0
+access_hr_adviser_contract,hr.contract.adviser,hr_payroll.model_hr_contract,group_hr_payroll_account,1,0,0,0

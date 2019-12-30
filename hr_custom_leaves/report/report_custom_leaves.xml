@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_custom_leave">  
+        <t t-call ="web.html_container">
+            <t t-call ="web.external_layout">
+                <group string ="Employee Leave">
+
+                    <h2 style="text-align:center">Employees Leave Report </h2>
+                    <br></br>
+                    <!-- <table class="table table-striped" width="100%"> -->
+                    <div class="table-responsive-sm">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee Name</th>
+                                    <th scope="col">Leave Type</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Req.D/H</th>
+                                    <th scope="col">Replaced by</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="docs" t-as="o">
+                                    <td><span t-field="o.employee_id.name"/></td>
+                                    <td><span t-field="o.holiday_status_id.name"/></td>
+                                    <td><span t-field="o.name"/></td>
+                                    <td><span t-field="o.date_from"/></td>
+                                    <td><span t-field="o.date_to"/></td>
+                                    <td><span t-field="o.duration_display"/></td>
+                                    <td><span t-field="o.employee_rep_id.name"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br></br>
+                        <!-- <table class="table-bordereless" width="100%">
+                            <tbody>
+                                <tr>
+                                    <th width="20%" height="40px">Human Resurce Signiture:</th>
+                                    <td width="50%" height="40px"></td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    </div>
+                </group>
+            </t>
+        </t>
+    </template>
+</odoo>

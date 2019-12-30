@@ -1,0 +1,142 @@
+<odoo>
+    <data>
+        <!-- inherit view of payslip-->
+        <record id="view_inhereted_deduction_payslip_form" model="ir.ui.view">
+            <field name="name">payslip.payslips.deduction</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="deduction" string="Deduction" />
+                </xpath>
+                <xpath expr="//page[4]" position="after">
+                    <page string="Deduction Of Employee">
+                        <field name="deduction_line" nolabel="1" readonly="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="deduction_id"/>
+                                <field name="description"/>
+                                <field name="date"/>
+                                <field name="amount" sum="Total"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Form view of Employee Bonce -->
+        <record id="view_deduction_form" model="ir.ui.view">
+            <field name="name">deduction.deduction</field>
+            <field name="model">deduction.deduction</field>
+            <field name="arch" type="xml">
+                <form string="Employee Deduction">
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
+                        <button name="set_amount" type="object" string="Calc Amount" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('fix_formula', '=', 'fix')]}" class="oe_highlight"/>
+                        <button name="action_hr_approval" type="object" string="Hr Approval " states="confirm" class="oe_highlight"/>
+                        <button name="action_ceo_approve" type="object" string="CO Approval" states="hr_manager" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm,hr_manager,done"/>
+                    </header>
+                    <sheet string="Employee Deduction">
+                        <div>
+                            <h3>
+                                <field name="deduction_no"/>
+                            </h3>
+                        </div>
+                        <group string="Deduction">
+                            <group>
+                                <field name="employee" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="amount" attrs="{'readonly': ['|', ('state', '!=', 'draft'), ('fix_formula', '!=', 'fix')]}"/>
+                            </group>
+                            <group>
+                                <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="deduction_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="fix_formula" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="formual"  attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('fix_formula','=','fix')]}"
+                                placeholder="result=(wage/30)*5"/>
+                                <field name="voucher_ref"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- tree view of Employee Bonce -->
+        <record id="view_deduction_tree" model="ir.ui.view">
+            <field name="name">deduction.deduction</field>
+            <field name="model">deduction.deduction</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Deduction">
+                    <field name="name"/>
+                    <field name="employee"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of Bonce -->
+        <record id="action_deduction" model="ir.actions.act_window">
+            <field name="name">Employee Deduction</field>
+            <field name="res_model">deduction.deduction</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_deduction" parent="menu_employee_process" name="Employee Deduction" action="action_deduction"/>
+
+
+        <!-- form view of Employee Bonce Type-->
+        <record id="view_deduction_type_form" model="ir.ui.view">
+            <field name="name">deduction.type</field>
+            <field name="model">deduction.type</field>
+            <field name="arch" type="xml">
+                <form string="Employee deduction">
+                    <sheet string="Bonce Type">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object"  class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group string="Deduction Type" colspan="2" col="4">
+                            <field name="name"/>
+                             <field name="formual"       placeholder="available object {contract ,employee , wage , deduction }
+                             result=(wage/30)*5"/>
+
+                         </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- tree view of  Bonce Type-->
+        <record id="view_deduction_type_tree" model="ir.ui.view">
+            <field name="name">deduction.Type</field>
+            <field name="model">deduction.type</field>
+            <field name="arch" type="xml">
+                <tree string="Deduction Type">
+                    <field name="name"/>
+<!--                    <field name="pay_included"/>-->
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of Bonce Type-->
+        <record id="action_deduction_type" model="ir.actions.act_window">
+            <field name="name">deduction type</field>
+            <field name="res_model">deduction.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_deduction_type" parent="hr_payroll.menu_hr_payroll_configuration" name="deduction Type" action="action_deduction_type"/>
+
+    </data>
+</odoo>

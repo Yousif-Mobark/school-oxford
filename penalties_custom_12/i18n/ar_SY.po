@@ -1,0 +1,650 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* penalties_custom_11
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-06 16:31+0000\n"
+"PO-Revision-Date: 2019-11-06 16:31+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_active
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_active
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_active
+msgid "Active"
+msgstr "نشط"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_amount
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_amount
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_amount
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_amount
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/bonce.py:46
+#: code:addons/penalties_custom_11/model/deduction.py:43
+#, python-format
+msgid "Amount Must Be Greater Than Zero"
+msgstr "المبلغ يجب ان يكون اكبر من صفر"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_bonce_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_payslip_bonce
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_inh_payslip_form
+msgid "Bonce"
+msgstr "اجر اضافي"
+
+#. module: penalties_custom_11
+#: model:ir.actions.act_window,name:penalties_custom_11.action_bonce
+msgid "Bonce Bonce"
+msgstr "اجر اضافي"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_inh_payslip_form
+msgid "Bonce Of Employee"
+msgstr "الاجر الاضافي للموظف"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_bonce_type
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_fix_formula
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_pay_included
+#: model:ir.ui.menu,name:penalties_custom_11.menu_bonce_type
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_type_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_type_tree
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_type_form
+msgid "Bonce Type"
+msgstr "نوع الاجر الاضافي"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_payslip_bonce_line
+msgid "Bonce lines"
+msgstr "عناصر الاجر الاضافي"
+
+#. module: penalties_custom_11
+#: model:ir.module.category,name:penalties_custom_11.module_management
+msgid "Bonce module access"
+msgstr "الوصول لمديول العلاوة"
+
+#. module: penalties_custom_11
+#: model:ir.actions.act_window,name:penalties_custom_11.action_bonce_type
+msgid "Bonce type"
+msgstr "نوع الاجر الاضافي"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalty_type_form
+msgid "CEO Approval"
+msgstr "موافقه المدير العام"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_form
+msgid "CO Approval"
+msgstr "موافقه المدير العام"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_form
+msgid "Calc Amount"
+msgstr "حساب الاجر الاضافي"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_res_config_settings_calc_formula
+#: model:ir.ui.view,arch_db:penalties_custom_11.res_config_settings_view_form_penalties_inh
+msgid "Calc Formula"
+msgstr "قالب الحساب"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_pay_included
+msgid "Calculation"
+msgstr "ظريقة الحساب"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_fix_formula
+msgid "نوع الحساب"
+msgstr ""
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_code
+msgid "Code"
+msgstr "الكود"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalty_type_form
+msgid "Compute Penalty"
+msgstr "حساب الجزاء"
+
+#. module: penalties_custom_11
+#: selection:bonce.bonce,state:0
+#: selection:deduction.deduction,state:0
+#: selection:hr.employee.penalties,state:0
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalty_type_form
+msgid "Confirm"
+msgstr "تأكيد"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_create_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_create_uid
+msgid "Created by"
+msgstr "أنشئ بواسطة"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_create_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_create_date
+msgid "Created on"
+msgstr "أنشئ في"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_current_penalty
+msgid "Current penalty"
+msgstr "الجزاء الحالي"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_date
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: penalties_custom_11
+#: selection:hr.employee.penalties,type:0
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_deduction_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_payslip_deduction
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_deduction
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_inhereted_deduction_payslip_form
+#: selection:penal.penal,type:0
+msgid "Deduction"
+msgstr "الخصوم"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_inhereted_deduction_payslip_form
+msgid "Deduction Of Employee"
+msgstr "خصومات الموظف"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_deduction_type
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_deduction_type
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_type_tree
+msgid "Deduction Type"
+msgstr "نوع الخصوم"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_payslip_deduction_line
+msgid "Deduction line"
+msgstr "عناصر الخصم"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_deduc_ref
+msgid "Deduction reference"
+msgstr "مرجع الخصم"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_dep
+msgid "Department"
+msgstr "القسم"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_description
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_description
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_description
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_description
+msgid "Description"
+msgstr "الوصف"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_display_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: penalties_custom_11
+#: selection:bonce.bonce,state:0
+#: selection:deduction.deduction,state:0
+#: selection:hr.employee.penalties,state:0
+msgid "Done"
+msgstr "منتهي"
+
+#. module: penalties_custom_11
+#: selection:bonce.bonce,state:0
+#: selection:deduction.deduction,state:0
+#: selection:hr.employee.penalties,state:0
+msgid "Draft"
+msgstr "مسوده"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_duration
+msgid "Duration in Days"
+msgstr "الفترة بالايام"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_employee
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_employee
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_employee
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: penalties_custom_11
+#: model:ir.ui.menu,name:penalties_custom_11.menu_bonce
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_tree
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_type_form
+msgid "Employee Bonce"
+msgstr "علاوة الموظفين"
+
+#. module: penalties_custom_11
+#: model:ir.actions.act_window,name:penalties_custom_11.action_deduction
+#: model:ir.ui.menu,name:penalties_custom_11.menu_deduction
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_tree
+msgid "Employee Deduction"
+msgstr "خصومات الموظفين"
+
+#. module: penalties_custom_11
+#: model:ir.actions.act_window,name:penalties_custom_11.action_penalty
+#: model:ir.ui.menu,name:penalties_custom_11.menu_Penalty
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalty_type_form
+msgid "Employee Penalty"
+msgstr "جزاءات الموظف"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_type_form
+msgid "Employee deduction"
+msgstr "خصومات الموظفين"
+
+#. module: penalties_custom_11
+#: selection:bonce.bonce,fix_formula:0
+#: selection:deduction.deduction,fix_formula:0
+msgid "Fixed"
+msgstr "ثابت"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_flag
+msgid "Flag"
+msgstr "علامة"
+
+#. module: penalties_custom_11
+#: selection:bonce.bonce,fix_formula:0
+#: selection:deduction.deduction,fix_formula:0
+msgid "Formula"
+msgstr "قالب"
+
+#. module: penalties_custom_11
+#: selection:deduction.deduction,state:0
+msgid "Hr"
+msgstr "الموارد البشرية"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_deduction_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalty_type_form
+msgid "Hr Approval"
+msgstr "مصدق من الموارد البشرية"
+
+#. module: penalties_custom_11
+#: selection:bonce.bonce,state:0
+#: selection:hr.employee.penalties,state:0
+msgid "Hr Manager"
+msgstr "موافقه الموارد البشرية"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_hr_penalties_tree
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalties_form
+msgid "Hr Penalties"
+msgstr "الجزاءات"
+
+#. module: penalties_custom_11
+#: model:ir.actions.act_window,name:penalties_custom_11.action_hr_penalties
+msgid "Hr Penalties Window"
+msgstr "شاشة الجزاءات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_hr_penalty_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_hr_penalty_id
+msgid "Hr Penalty"
+msgstr "الجزاءات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_id
+msgid "ID"
+msgstr "المعرف"
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/bonce.py:97
+#, python-format
+msgid "In order for ceo approve, state must be in hr manager"
+msgstr "حتى تتم الموافقة من المدير العام الطلب يجب ان يوافق من  الموارد البشرية"
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/bonce.py:89
+#, python-format
+msgid "In order of hr approve state must be in confirm"
+msgstr "حتى يتم الموافقة من الموارد البشرية الطلب يجب ان يوافق عليها اولا"
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/deduction.py:103
+#, python-format
+msgid "In order to approve this deduction state must be in confirm"
+msgstr "حتى يتم الموافقة من الموارد البشرية الطلب يجب ان يوافق عليها اولا"
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/deduction.py:131
+#, python-format
+msgid "In order to ceo approve this deduction state must be in hr approve"
+msgstr "حتى تتم الموافقة من المدير العام الطلب يجب ان يوافق من  الموارد البشرية"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_is_paid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_is_paid
+msgid "Is Paid"
+msgstr "هل تم دفعها"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_multi_channel_sale_config_default_journal_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_res_config_settings_default_journal_id
+msgid "Journal"
+msgstr "دفتر اليومية"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties___last_update
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal___last_update
+msgid "Last Modified on"
+msgstr "آخر تعديل في"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_write_uid
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_write_date
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث في"
+
+#. module: penalties_custom_11
+#: model:res.groups,name:penalties_custom_11.group_manager
+msgid "Manager"
+msgstr "المدير"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_type_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_type_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_name
+msgid "Name"
+msgstr "الاسم"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_hr_payslip
+msgid "Pay Slip"
+msgstr "ظرف المرتب"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.res_config_settings_view_form_penalties_inh
+msgid "Payroll"
+msgstr "الراتب"
+
+#. module: penalties_custom_11
+#: selection:bonce.type,pay_included:0
+#: selection:deduction.type,pay_included:0
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_payslip
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_payslip
+msgid "Payslip"
+msgstr "الرتب"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalties_form
+msgid "Penalties"
+msgstr "الجزاءات"
+
+#. module: penalties_custom_11
+#: model:ir.ui.menu,name:penalties_custom_11.menu_hr_penalties
+msgid "Penalties "
+msgstr "الجزاءات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_penalties_penalty
+msgid "Penalties Lines"
+msgstr "عناصر الجزاءات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_type
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_type
+msgid "Penalties type"
+msgstr "نوع الجزاء"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_penalty_type_tree
+msgid "Penalty Type"
+msgstr "نوع الجزاء"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_current_pointer
+msgid "Pointer"
+msgstr "المؤشر"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_previous
+msgid "Previous penalty"
+msgstr "الجزاء السابق"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_line_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_name
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_line_name
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_res_config_settings
+msgid "Res config for Twilio "
+msgstr "Res config for Twilio "
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_bonce_no
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_deduction_no
+#: model:ir.model.fields,field_description:penalties_custom_11.field_penal_penal_penalties_no
+msgid "Sequence"
+msgstr "التسلسل"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_state
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_state
+#: model:ir.model.fields,field_description:penalties_custom_11.field_hr_employee_penalties_state
+msgid "State"
+msgstr "الحالة"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_bonce_inh_payslip_form
+#: model:ir.ui.view,arch_db:penalties_custom_11.view_inhereted_deduction_payslip_form
+msgid "Total"
+msgstr "الإجمالي "
+
+#. module: penalties_custom_11
+#: model:res.groups,name:penalties_custom_11.group_user
+msgid "User"
+msgstr "المستخدم"
+
+#. module: penalties_custom_11
+#: model:ir.module.category,description:penalties_custom_11.module_management
+msgid "User access level for this module"
+msgstr "User access level for this module"
+
+#. module: penalties_custom_11
+#: selection:bonce.type,pay_included:0
+#: selection:deduction.type,pay_included:0
+msgid "Voucher"
+msgstr "مستند"
+
+#. module: penalties_custom_11
+#: model:ir.ui.view,arch_db:penalties_custom_11.res_config_settings_view_form_penalties_inh
+msgid "Voucher Configuration"
+msgstr "اعدادات المستندات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_multi_channel_sale_config_default_voucher_expense_account_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_res_config_settings_default_voucher_expense_account_id
+msgid "Voucher Expense Account"
+msgstr "حساب منصرف المستندات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_multi_channel_sale_config_default_voucher_payable_account_id
+#: model:ir.model.fields,field_description:penalties_custom_11.field_res_config_settings_default_voucher_payable_account_id
+msgid "Voucher Payable Account"
+msgstr "حساب دفعيات المستندات"
+
+#. module: penalties_custom_11
+#: model:ir.model.fields,field_description:penalties_custom_11.field_bonce_bonce_voucher_ref
+#: model:ir.model.fields,field_description:penalties_custom_11.field_deduction_deduction_voucher_ref
+msgid "Voucher reference"
+msgstr "مرجع المستند"
+
+#. module: penalties_custom_11
+#: selection:hr.employee.penalties,type:0
+#: selection:penal.penal,type:0
+msgid "Worrying"
+msgstr "انزار"
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/deduction.py:34
+#: code:addons/penalties_custom_11/model/penalties.py:64
+#, python-format
+msgid "You cannot delete Form which is not is draft."
+msgstr "لا يمكن الحذف الا اذا كانت الحالة مسودة."
+
+#. module: penalties_custom_11
+#: code:addons/penalties_custom_11/model/bonce.py:30
+#, python-format
+msgid "You cannot delete form which is not is draft."
+msgstr "لا يمكن الحذف الا اذا كانت الحالة مسودة."
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_bonce_bonce
+msgid "bonce.bonce"
+msgstr "bonce.bonce"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_bonce_line
+msgid "bonce.line"
+msgstr "bonce.line"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_bonce_type
+msgid "bonce.type"
+msgstr "bonce.type"
+
+#. module: penalties_custom_11
+#: model:ir.ui.menu,name:penalties_custom_11.menu_deduction_type
+msgid "deduction Type"
+msgstr "نوع الخصم"
+
+#. module: penalties_custom_11
+#: model:ir.actions.act_window,name:penalties_custom_11.action_deduction_type
+msgid "deduction type"
+msgstr "نوع الخصم"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_deduction_deduction
+msgid "deduction.deduction"
+msgstr "deduction.deduction"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_deduction_line
+msgid "deduction.line"
+msgstr "deduction.line"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_deduction_type
+msgid "deduction.type"
+msgstr "deduction.type"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_empl_penalty
+msgid "empl.penalty"
+msgstr "empl.penalty"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_hr_employee_penalties
+msgid "hr.employee.penalties"
+msgstr "hr.employee.penalties"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_hr_penalties
+msgid "hr.penalties"
+msgstr "hr.penalties"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_irregula_irregula
+msgid "irregula.irregula"
+msgstr "irregula.irregula"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_penal_penal
+msgid "penal.penal"
+msgstr "penal.penal"
+
+#. module: penalties_custom_11
+#: model:ir.model,name:penalties_custom_11.model_penalties_penalties
+msgid "penalties.penalties"
+msgstr "penalties.penalties"
+

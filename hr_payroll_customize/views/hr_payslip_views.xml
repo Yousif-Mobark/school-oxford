@@ -1,0 +1,56 @@
+<odoo>
+    <!-- hide buttons in individual payslips-->
+    <record id="view_hr_payslip_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.inherit</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_payslip_done']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath> <xpath expr="//button[@name='refund_sheet']" position="attributes">
+            <attribute name="invisible">True</attribute>
+        </xpath> <xpath expr="//button[@name='action_payslip_draft']" position="attributes">
+            <attribute name="invisible">True</attribute>
+        </xpath> <xpath expr="//button[@name='action_payslip_cancel']" position="attributes">
+            <attribute name="invisible">True</attribute>
+        </xpath>
+        </field>
+    </record>
+    <record id="view_hr_payslip_run_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.inherit</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <!-- show my states -->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,submit,confirm,close</attribute>
+            </xpath>
+            <!-- hide original close button -->
+            <xpath expr="//button[@name='close_payslip_run']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <!-- draft button states-->
+            <xpath expr="//button[@name='draft_payslip_run']" position="attributes">
+                <attribute name="states">submit,confirm</attribute>
+            </xpath>
+            <!-- new buttons -->
+
+            <xpath expr="//button[@name='draft_payslip_run']" position="before">
+
+                <button string="Compute Batch" name="compute_batch"
+                        states="draft" groups="hr_payroll.group_hr_payroll_user,account.group_account_manager"
+                        type="object" class="btn-primary o_open_tasks"/>
+
+
+                <button string="Submit to Finance" name="action_submit_batch"
+                        states="draft" groups="hr_payroll.group_hr_payroll_user" type="object"/>
+
+                <button string="Confirm" name="action_confirm_batch"
+                        states="submit" groups="account.group_account_manager" type="object"/>
+
+                <button string="Post Accounting Entries" name="action_close_batch"
+                        states="confirm" groups="account.group_account_manager" type="object"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

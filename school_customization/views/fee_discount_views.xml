@@ -1,0 +1,71 @@
+<odoo>
+<!--    <record id="fee_discount_tree_view" model="ir.ui.view">-->
+<!--        <field name="name">fee.discount.tree</field>-->
+<!--        <field name="model">fee.discount</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree>-->
+<!--                <field name="name"/>-->
+<!--                <field type="type" />-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+    <record id="fee_discount_form_view" model="ir.ui.view">
+        <field name="name">fee.discount.form</field>
+        <field name="model">fee.discount</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" />
+                        </group>
+                        <group>
+
+                            <field name="type" />
+                            <field name="percentage"
+                                   attrs="{'invisible': [('type', '!=', 'percentage')],
+                                        'required': ('type', '=', 'percentage')}"/>
+                            <field name="amount"  attrs="{'invisible': [('type', '!=', 'fixed')],
+                                        'required': ('type', '=', 'fixed')}"/>
+                        </group>
+
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="fee_discount_action" model="ir.actions.act_window">
+        <field name="name">Discounts</field>
+        <field name="res_model">fee.discount</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new discount
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_op_fees_submenu" name="Fees"
+              sequence="10"
+              parent="openeducat_admission.menu_op_admission_root"/>
+
+    <menuitem id="menu_fees_discount_action" name="Fee Discounts"
+              sequence="10"
+              parent="menu_op_fees_submenu"
+              action="fee_discount_action"/>
+
+</odoo>

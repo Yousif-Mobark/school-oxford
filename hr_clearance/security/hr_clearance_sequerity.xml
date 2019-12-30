@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Category of Management -->
+    <record id="hr_clearance_access_cat_manager" model="ir.module.category" >
+        <field name="name">Hr Manager</field>
+    </record>
+
+    <!--The manager group -->
+    <record id="hr_clearance_access_group" model="res.groups">
+        <field name="name">Manager</field>
+        <!-- <field name="help">Reservation Hotel Manager</field> -->
+        <field name="category_id" ref="hr_clearance_access_cat_manager" />
+    </record>
+
+</odoo>

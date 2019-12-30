@@ -1,0 +1,14 @@
+<odoo>
+    <data noupdate="1">
+
+        <!-- Student -->
+        <record id="timetable_frame_student" model="timetable.student">
+        </record>
+        <!--  faculty -->
+         <record id="timetable_frame_faculty" model="timetable.faculty">
+        </record>
+        <!-- classroom -->
+        <record id="timetable_frame_classroom" model="timetable.classroom">
+        </record>
+    </data>
+</odoo>

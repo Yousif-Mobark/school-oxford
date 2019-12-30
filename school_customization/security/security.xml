@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_op_coordinator" model="res.groups">
+            <field name="name">Coordinator</field>
+            <field name="category_id" ref="openeducat_core.module_category_openeducat"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[(4, ref('openeducat_core.group_op_faculty')),
+                                                    (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_op_registerer" model="res.groups">
+            <field name="name">Registerer</field>
+            <field name="category_id" ref="openeducat_core.module_category_openeducat"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[(4, ref('openeducat_core.group_op_student')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_op_transport" model="res.groups">
+            <field name="name">Transportation Officer</field>
+            <field name="category_id" ref="openeducat_core.module_category_openeducat"/>
+            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="implied_ids" eval="[(4, ref('openeducat_core.group_op_student')), (4, ref('base.group_user'))]"/>
+        </record>
+
+        <record model="ir.rule" id="view_students_rule">
+            <field name="name">View Students</field>
+            <field name="model_id" ref="openeducat_core.model_op_student" />
+            <field name="groups"
+                   eval="[(4, ref('group_op_registerer'))]" />
+            <field name="domain_force"> [(1,'=',1)]</field>
+        </record>
+
+        <record model="ir.rule" id="view_students_rule_transport">
+            <field name="name">View Students</field>
+            <field name="model_id" ref="openeducat_core.model_op_student" />
+            <field name="groups"
+                   eval="[(4, ref('group_op_transport'))]" />
+            <field name="domain_force"> [(1,'=',1)]</field>
+        </record>
+
+
+        <!-- lesson plans own plans -->
+         <record id="lesson_plan_own_book_rule" model="ir.rule">
+            <field name="name">Own Book rule</field>
+            <field ref="model_book_book" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('openeducat_core.group_op_faculty'))]"/>
+        </record>
+         <record id="lesson_plan_own_year_plan_rule" model="ir.rule">
+            <field name="name">Own year plan rule</field>
+            <field ref="model_year_plan" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('openeducat_core.group_op_faculty'))]"/>
+        </record>
+        <record id="lesson_plan_own_month_plan_rule" model="ir.rule">
+            <field name="name">Own month plan rule</field>
+            <field ref="model_month_plan" name="model_id"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('openeducat_core.group_op_faculty'))]"/>
+        </record>
+        <!--coordnatier sees everything -->
+        <record id="admin_all_book_rule" model="ir.rule">
+            <field name="name">All Books</field>
+            <field ref="model_book_book" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('openeducat_core.group_op_back_office_admin'))]"/>
+        </record>
+         <record id="admin_all_year_plan_rule" model="ir.rule">
+            <field name="name">All yearly lesson plans</field>
+            <field ref="model_year_plan" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('openeducat_core.group_op_back_office_admin'))]"/>
+        </record>
+        <record id="admin_all_month_plan_rule" model="ir.rule">
+            <field name="name">All Monthly lesson plans</field>
+            <field ref="model_month_plan" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('openeducat_core.group_op_back_office_admin'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

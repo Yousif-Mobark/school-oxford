@@ -1,0 +1,80 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="hr_employee_custom_tree_view">
+      <field name="name">hr.employee.custom.tree.view</field>
+      <field name="model">hr.employee.customize</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="department_id"/>
+          <field name="job_id"/>
+          <field name="contract_type_id"/>
+          <field name="wage"/>
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="hr_employee_custom_form_view">
+      <field name="name">hr.employee.custom.form.view</field>
+      <field name="model">hr.employee.customize</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button name="action_done" string="Set To Done" class="oe_highlight" type="object" states="draft"/>
+            <field name="state" widget="statusbar"/>
+          </header>
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <field name="employee_id" invisible="1"/>
+              <field name="contract_id" invisible="1"/>
+                <button attrs="{'invisible': [('employee_id', '=', False)]}" name="action_open_employee" string="Employee" type="object" groups="hr.group_hr_user"
+                        class="oe_stat_button" icon="fa-profile">
+                </button>
+              <button attrs="{'invisible': [('contract_id', '=', False)]}" name="action_open_contract" string="Contract" type="object" groups="hr.group_hr_manager"
+                        class="oe_stat_button" icon="fa-book">
+              </button>
+
+            </div>
+            <group string="Employee Info">
+              <group>
+                <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="manager_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="user_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+              </group>
+              <group>
+                <field name="date" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="job_id"  attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="is_manager" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="gender" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+              </group>
+            </group>
+            <group string="Contract Info">
+              <group>
+                <field name="contract_type_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="basic"  required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="wage"  required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+              </group>
+              <group>
+                 <field name="salary_structure" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                 <field name="working_schedule" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_employee_custom_action">
+      <field name="name">Employee window</field>
+      <field name="res_model">hr.employee.customize</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem name="Employee Form" id="hr_employee_customize_menu" parent="hr.menu_hr_root"
+              action="hr_employee_custom_action" groups="hr.group_hr_user" sequence="0"/>
+
+  </data>
+</odoo>

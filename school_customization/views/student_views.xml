@@ -1,0 +1,148 @@
+<odoo>
+    <!-- form view -->
+    <record id="view_op_student_form_inherit_names" model="ir.ui.view">
+        <field name="name">op.student.form.inherit.names</field>
+        <field name="model">op.student</field>
+        <field name="inherit_id" ref="openeducat_core.view_op_student_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']" position="replace">
+                <div class="oe_title">
+                    <h1>
+                        <table>
+                            <tr>
+                                <td style="padding-right:10px;">
+                                    <field name="first_name" required="1" placeholder="First Name"/>
+                                </td>
+                                <td style="padding-right:10px;">
+                                    <field name="middle_name" placeholder="Second Name" required="1"/>
+                                </td>
+                                <td style="padding-right:10px;">
+                                    <field name="third_name" placeholder="Third Name" required="1"/>
+                                </td>
+                                <td style="padding-right:10px;">
+                                    <field name="last_name" placeholder="Last Name" required="1"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </h1>
+
+                    <h1>
+                        <table>
+                            <tr>
+                                <td style="padding-right:10px;">
+                                    <field name="ar_last_name" placeholder="الاسم الاخير" required="1"/>
+                                </td>
+                                <td style="padding-right:10px;">
+                                    <field name="ar_third_name" placeholder=" الاسم الثالث" required="1"/>
+                                </td>
+                                <td style="padding-right:10px;">
+                                    <field name="ar_middle_name" placeholder="الاسم الثاني" required="1"/>
+                                </td>
+                                <td style="padding-right:10px;">
+                                    <field name="ar_first_name" required="1" placeholder="الاسم الاول"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </h1></div>
+            </xpath>
+            <xpath expr="//field[@name='already_partner']" position="after">
+                <field name="id_type" />
+                <field name="id_file" filename="ID" placeholder="Choose a file to upload..."
+                       attrs="{'required': [('id_type', '!=', False)]}"/>
+            </xpath>
+
+            <field  name="mobile" position="attributes">
+                <attribute name="required">False</attribute>
+            </field>
+            <field  name="email" position="attributes">
+                <attribute name="required">False</attribute>
+            </field>
+            <field  name="lang" position="replace">
+            </field>
+            <field  name="visa_info" position="replace">
+            </field>
+            <field  name="emergency_contact" position="replace">
+            </field>
+            <!-- -->
+            <xpath expr="//field[@name='blood_group']" position="after">
+                <field name="place_of_birth" />
+                <field name="primary_lang" />
+                <field name="lang_other" attrs="{
+                            'invisible': [('primary_lang', '!=', 'other')],
+                            }" />
+                <field name="religion" />
+                <field name="other_religion" attrs="{
+                            'invisible': [('religion', '!=', 'other')],
+                            }" />
+            </xpath>
+        </field>
+
+    </record>
+
+    <!-- tree view -->
+    <record id="view_op_student_tree_inherit_names" model="ir.ui.view">
+        <field name="name">op.student.tree.inherit.names</field>
+        <field name="model">op.student</field>
+        <field name="inherit_id" ref="openeducat_core.view_op_student_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lang']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='title']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='middle_name']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='last_name']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='nationality']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='name']" position="replace">
+                <field name="full_name"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- kanban view -->
+    <record id="kanban_view_student_inherit_names" model="ir.ui.view">
+        <field name="name">Student Kanban Inherit Names</field>
+        <field name="model">op.student</field>
+        <field name="inherit_id" ref="openeducat_core.kanban_view_student" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='middle_name']" position="after">
+                <t t-if="record.third_name.raw_value">
+                    <field name="third_name"/>
+                </t>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_op_student_form_register_fees_inherit" model="ir.ui.view">
+        <field name="name">op.student.form.register.fees.inherit</field>
+        <field name="model">op.student</field>
+        <field name="inherit_id" ref="openeducat_fees.view_op_student_form_fees_inherit"/>
+        <field name="priority" eval="9"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='fees_detail_ids']" position="replace">
+                <field name="fees_detail_ids" readonly="1">
+                    <tree string="Fees Collection Details" editable="top">
+                        <field name="fees_line_id" invisible="1"/>
+                        <field name="date"/>
+                        <field name="amount"/>
+                        <field name="product_id" invisible="1"/>
+                        <field name="invoice_id" invisible="1"/>
+                        <field name="state"/>
+                        <field name="invoice_state"/>
+                        <button string="Create Invoice"
+                                states="draft" type="object" name="get_invoice"
+                                groups="openeducat_core.group_op_back_office,school_customization.group_op_registerer"/>
+                        <button string="View Invoice"
+                                groups="openeducat_core.group_op_back_office,school_customization.group_op_registerer"
+                                states="invoice" type="object"
+                                name="action_get_invoice"/>
+                    </tree>
+                </field>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

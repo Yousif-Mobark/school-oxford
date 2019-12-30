@@ -1,0 +1,60 @@
+<odoo>
+    <record id="school_year_tree_view" model="ir.ui.view">
+        <field name="name">school.year.tree</field>
+        <field name="model">school.year</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="start_date" />
+                <field name="end_date" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="school_year_form_view" model="ir.ui.view">
+        <field name="name">school.year.form</field>
+        <field name="model">school.year</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_run" string="Start Year" type="object" class="btn-primary" states="draft"/>
+                    <button name="action_close" string="End Year" type="object" class="btn-primary" states="running"/>
+
+                    <field name="state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_date" />
+                            <field name="end_date" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="school_year_action" model="ir.actions.act_window">
+        <field name="name">School Year</field>
+        <field name="res_model">school.year</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new school year
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_school_year_submenu" name="School Years"
+              sequence="9"
+              parent="openeducat_core.menu_op_school_config"/>
+
+    <menuitem id="menu_school_year_action" name="School Years"
+              sequence="10"
+              parent="menu_school_year_submenu"
+              action="school_year_action"
+              groups="openeducat_core.group_op_back_office_admin"/>
+
+</odoo>

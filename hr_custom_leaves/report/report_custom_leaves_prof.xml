@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report 
+            id="action_employee_leave_report" 
+            name="hr_custom_leaves.report_custom_leave" 
+            file="hr_custom_leaves.report_custom_leave"
+            model="hr.leave" 
+            report_type="qweb-pdf"
+            string="employee leave report" 
+        />
+    </data>
+</odoo>

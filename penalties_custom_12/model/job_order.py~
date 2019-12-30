@@ -1,0 +1,969 @@
+from odoo import models, fields, api, _
+from datetime import datetime
+from odoo.exceptions import except_orm, Warning,UserError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, float_compare
+
+class JobOrder(models.Model):
+  _name="job.order"
+  _inherit = 'mail.thread'
+  _description = 'Create a job order'
+  _rec_name = 'job_no'
+
+  job_no = fields.Char('Job No.', help='Auto-generated Job No. for Job Order')
+  name = fields.Char('Description ')
+  Complain = fields.Text(string="Customer Complain", required=False, )
+  Daignose = fields.Text(string="Diagnose", required=False, )
+  Job_order_text = fields.Text(string="Job order Note")
+  vin = fields.Char(string="VIN", required=False)
+  plat_number = fields.Char(string="Plat Number", required=False)
+  model = fields.Char(string="Model", required=False)
+  customer_id = fields.Many2one('res.partner', 'Customer', required=True, store=True)
+  complaint_date = fields.Datetime('Complaint Date', required=True, default=datetime.now())
+  start_date = fields.Datetime('Start Date')
+  end_date = fields.Datetime('End Date')
+  search_serial = fields.Char('Search by Serial Number')
+  product_id = fields.Many2one('product.product', 'Product')
+  customer_contact = fields.Char('Telephone', related='customer_id.phone')
+  num_days = fields.Integer(string='Number of Days', compute='get_num_days')
+  service_details_ids = fields.One2many('sale.order.line', 'service_order_id', string='Service Detail(s)')
+  contact_person = fields.Many2one('hr.employee', 'Contact Person')
+  channel = fields.Selection([('email', 'Email'), ('telephone', 'Telephone'), ('direct_contact', 'Direct Contact')])
+  days_left = fields.Float('Days Left', readonly="True" ,compute="compute_days_left")
+  spare_part_details_ids = fields.One2many('spare.part', 'job_order_id', string='Spare Part(s)')
+  spare_part_details_ids_2 = fields.One2many('spare.par', 'job_order_id',string='Spare Part(s)',domain=[('name.type','!=','service')])
+  Service_detail = fields.One2many('service.service', 'job_order_id', string='Service(s)')
+  # Labour_detail = fields.One2many('labour.labour', 'job_order_id', string='Service(s)')
+  labour_Service_detail = fields.One2many('labour.labour', 'job_order_id', string='Labour(s)')
+  sales_id = fields.Many2one('sale.order', 'Sale Reference', readonly=True)
+  sale_order_ids = fields.One2many('sale.order.job', 'job_order_id', string='Sale(s)')
+  Purchase_id = fields.One2many('purchase.order', 'job_id','Purchase Reference', readonly=True)
+  Purchase_order_ids = fields.One2many('purchase.order.job', 'job_order_id', string='Sale(s)')
+  total_service_cost_eur = fields.Float('Total Vehicle inspection Cost(EUR)', default=0)
+  product_service = fields.Many2one('product.product', 'Service', domain=[('type', '=', 'service')])
+  service_flag = fields.Boolean('Service Flag',default=True)
+  total_cost = fields.Float('Total Revenue(SDG)', default=0, compute='get_totals', readonly=True)
+  total_cost2 = fields.Float('Total Cost(SDG)', default=0, compute='get_totals', readonly=True)
+  total_cost_ser = fields.Float('Total Revenue(SDG)', default=0, compute='get_totals', readonly=True)
+  total_cost2_ser = fields.Float('Total Cost(SDG)', default=0, compute='get_totals', readonly=True)
+  total_job_cost = fields.Float('Total Cost(SDG)', default=0, compute='get_total_job_cost_revenue', readonly=True)
+  total_job_revnue = fields.Float('Total Revenue(SDG)', default=0, compute='get_total_job_cost_revenue', readonly=True)
+  total_job_profit = fields.Float('Total Profit(SDG)', default=0, compute='get_total_job_cost_revenue', readonly=True)
+  total_service = fields.Float(string='Total', compute='get_total_service')
+  job_status_id = fields.Many2one('job.status', 'Job Order')
+  #total_spare_cost = fields.Float('Total Job order Revenue(SDG)', default=0, compute='get_totals', readonly=True)
+  #total_spare_cost2 = fields.Float('Total Job order Cost(SDG)', default=0, compute='get_totals', readonly=True)
+  total_service_cost = fields.Float('Total Job order Revenue(SDG)', default=0, compute='get_totals', readonly=True)
+  total_service_cost2 = fields.Float('Total Job order Cost(SDG)', default=0, compute='get_totals', readonly=True)
+  state = fields.Selection([
+      ('job order', 'Job Order'),
+      ('vehicle inspection', 'Vehicle Inspection'),
+      ('diagnose', 'Diagnose'),
+      ('supply', 'Supply'),
+  ], default='job order')
+
+  @api.one
+  def get_total_job_cost_revenue(self):
+
+      self.total_job_revnue = self.total_cost + self.total_cost_ser
+      self.total_job_cost = self.total_cost2 + self.total_cost2_ser
+
+  @api.multi
+  def generate_sales_order(self):
+      if self.service_flag==True :
+         sale_order_vals = {
+            'partner_id': self.customer_id.id,
+           # 'service_type': self.job_order_id.service_type,
+            'job_order_id': self.id,
+            'Job_order_text' : self.Job_order_text
+         }
+
+         self.sales_id = self.env['sale.order'].create(sale_order_vals)
+         sale_order_job = {
+          'name': self.sales_id.id,
+          'job_order_id': self.id,
+         }
+         self.env['sale.order.job'].create(sale_order_job)
+
+
+         self.service_flag = False
+         sale_order_lines_vals = []
+         for rec in self.Service_detail:
+             sale_order_lines_vals.append((0, 0, {
+                'job_order_id': self.id,
+                'order_id': self.sales_id.id,
+                'product_id': rec.name.id,
+                'product_uom': rec.name.uom_id.id,
+                'product_uom_qty': rec.qty,
+                'price_unit': rec.uprice,
+             }))
+
+         self.sales_id.order_line = sale_order_lines_vals
+         for record in self.sales_id.order_line:
+          # if record.product_id.type == 'service':
+            spare_parts_vals = {
+              'job_order_id': self.id,
+              'order_id': self.sales_id.id,
+              'name': record.product_id.id,
+              'description': record.product_id.description_sale,
+              'qty': record.product_uom_qty,
+              'uprice': record.price_unit,
+            }
+
+         self.spare_part_details_ids.create(spare_parts_vals)
+
+         for rec in self.sale_order_ids:
+             user_ids = self.env['mail.channel'].search([('name', '=', 'Sales')])
+             subtype_id = self.env['mail.message.subtype'].search([('name', '=', 'Discussions')]).id
+             mail_message_vals = {'message_type': 'comment',
+                               'body': 'Sale Order Number' + ' ' + rec.name.name + ' ' + 'waiting for confirm' + ' ' + 'in Job Order NO' + ' ' + self.job_no,
+                               'res_id': user_ids.id,
+                               'subtype_id': subtype_id,
+                               'model': 'mail.channel',
+                               'channel_ids': [(6, 0, user_ids.ids)],
+
+                               }
+      else:
+          if self.sales_id.state == 'sale':
+              sale_order_vals = {
+                  'partner_id': self.customer_id.id,
+                  # 'service_type': self.job_order_id.service_type,
+                  'job_order_id': self.id,
+                  'Job_order_text' : self.Job_order_text
+              }
+
+              self.sales_id = self.env['sale.order'].create(sale_order_vals)
+              sale_order_job = {
+                  'name': self.sales_id.id,
+                  'job_order_id': self.id,
+              }
+              self.env['sale.order.job'].create(sale_order_job)
+
+          sale_order_lines_vals = []
+          for rec in self.Service_detail:
+              sale_order_lines_vals.append((0, 0, {
+                  'job_order_id': self.id,
+                  'order_id': self.sales_id.id,
+                  'product_id': rec.name.id,
+                  'product_uom': rec.name.uom_id.id,
+                  'product_uom_qty': rec.qty,
+                  'price_unit': rec.uprice,
+              }))
+
+          self.sales_id.order_line = sale_order_lines_vals
+
+          for record in self.sales_id.order_line:
+              # if record.product_id.type == 'service':
+              spare_parts_vals = {
+                  'job_order_id': self.id,
+                  'order_id': self.sales_id.id,
+                  'name': record.product_id.id,
+                  'description': record.product_id.description_sale,
+                  'qty': record.product_uom_qty,
+                  'uprice': record.price_unit,
+              }
+
+          self.spare_part_details_ids.create(spare_parts_vals)
+
+          for rec in self.sale_order_ids:
+              user_ids = self.env['mail.channel'].search([('name', '=', 'Sales')])
+              subtype_id = self.env['mail.message.subtype'].search([('name', '=', 'Discussions')]).id
+              mail_message_vals = {'message_type': 'comment',
+                                   'body': 'Sale Order Number' + ' ' + rec.name.name + ' ' + 'waiting for confirm' + ' ' + 'in Job Order NO' + ' ' + self.job_no,
+                                   'res_id': user_ids.id,
+                                   'subtype_id': subtype_id,
+                                   'model': 'mail.channel',
+                                   'channel_ids': [(6, 0, user_ids.ids)],
+
+                                   }
+
+  @api.multi
+  def generate_sales_order_for_le(self):
+      if self.service_flag == True :
+          sale_order_vals = {
+              'partner_id': self.customer_id.id,
+              # 'service_type': self.job_order_id.service_type,
+              'job_order_id': self.id,
+          }
+
+          self.sales_id = self.env['sale.order'].create(sale_order_vals)
+
+          sale_order_job = {
+              'name': self.sales_id.id,
+              'job_order_id': self.id,
+
+          }
+
+          self.env['sale.order.job'].create(sale_order_job)
+
+          self.service_flag = False
+
+          sale_order_lines_vals = []
+          for rec in self.labour_Service_detail:
+              sale_order_lines_vals.append((0, 0, {
+                  'job_order_id': self.id,
+                  'order_id': self.sales_id.id,
+                  'product_id': rec.name.id,
+                  'product_uom': rec.name.uom_id.id,
+                  'product_uom_qty': rec.qty,
+                  'price_unit': rec.uprice,
+              }))
+          self.sales_id.order_line = sale_order_lines_vals
+          # self.Purchase_id = purchase_order_lines_vals
+          for record in self.sales_id.order_line:
+              # if record.product_id.type == 'service':
+              spare_parts_vals = {
+                  'job_order_id': self.id,
+                  'order_id': self.sales_id.id,
+                  'name': record.product_id.id,
+                  'description': record.product_id.description_sale,
+                  'qty': record.product_uom_qty,
+                  'uprice': record.price_unit,
+              }
+
+          for rec in self.sale_order_ids:
+              user_ids = self.env['mail.channel'].search([('name', '=', 'Sales')])
+              subtype_id = self.env['mail.message.subtype'].search([('name', '=', 'Discussions')]).id
+              mail_message_vals = {'message_type': 'comment',
+                                   'body': 'Sale Order Number' + ' ' + rec.name.name + ' ' + 'waiting for confirm' + ' ' + 'in Job Order NO' + ' ' + self.job_no,
+                                   'res_id': user_ids.id,
+                                   'subtype_id': subtype_id,
+                                   'model': 'mail.channel',
+                                   'channel_ids': [(6, 0, user_ids.ids)],
+
+                                   }
+
+
+
+      else:
+          print(self.sales_id,self.sales_id.state)
+          if self.sales_id.state == 'sale':
+              sale_order_vals = {
+                  'partner_id': self.customer_id.id,
+                  # 'service_type': self.job_order_id.service_type,
+                  'job_order_id': self.id,
+              }
+
+              self.sales_id = self.env['sale.order'].create(sale_order_vals)
+              sale_order_job = {
+                  'name': self.sales_id.id,
+                  'job_order_id': self.id,
+              }
+              self.env['sale.order.job'].create(sale_order_job)
+          ######################
+          # partner_obj = self.env['res.partner'].search([("id", "=", self.customer_id.id)])
+          # partner_obj.write({
+          #     'supplier': True,
+          # })
+          # # account_object = self.env['account.invoice']
+          # self.env.cr.execute("""select current_date;""")
+          # x = self.env.cr.fetchall()
+          # account_object_vals = {
+          #     'partner_id': self.labour_Service_detail.l_name.id,
+          #     'job_order_id': self.id,
+          #     'date_invoice': x[0][0],
+          #     'comment': "osman",
+          #     'state': 'draft',
+          #     'type': "in_invoice",
+          #     'journal_id': 1,
+          #     'currency_id': self.customer_id.company_id.currency_id.id,
+          #     'account_id': self.customer_id.property_account_receivable_id.id,
+          # }
+          # account_object = self.env['account.invoice'].create(account_object_vals)
+
+
+          # purchase_order_job = {
+          #     'name': self.Purchase_id,
+          #     'job_order_id': self.id
+          # }
+          # self.env['purchase.order.job'].create(purchase_order_job)
+
+          sale_order_lines_vals = []
+
+
+          # account_line_object = self.env['account.invoice.line']
+          for rec in self.labour_Service_detail:
+              sale_order_lines_vals.append((0, 0, {
+              'job_order_id': self.id,
+              'order_id': self.sales_id.id,
+              'product_id': rec.name.id,
+              'product_uom': rec.name.uom_id.id,
+              'product_uom_qty': rec.qty,
+              'price_unit': rec.uprice,
+               }))
+              # account_line_vals1 = {
+              #  'product_id': rec.name.id,
+              #  'name': 'Registration Fees',
+              #  'price_unit': rec.uprice,
+              #  'invoice_id': account_object.id,
+              #  'quantity': rec.qty,
+              #  # 'is_reg_fee': True,
+              #  'account_id': self.customer_id.property_account_receivable_id.id,
+              #   }
+              # self.env['account.invoice.line'].create(account_line_vals1)
+
+          self.sales_id.order_line = sale_order_lines_vals
+         # self.Purchase_id = purchase_order_lines_vals
+          for record in self.sales_id.order_line:
+          # if record.product_id.type == 'service':
+              spare_parts_vals = {
+             'job_order_id': self.id,
+             'order_id': self.sales_id.id,
+             'name': record.product_id.id,
+             'description': record.product_id.description_sale,
+             'qty': record.product_uom_qty,
+             'uprice': record.price_unit,
+            }
+
+          self.spare_part_details_ids.create(spare_parts_vals)
+
+
+          for rec in self.sale_order_ids:
+              user_ids = self.env['mail.channel'].search([('name', '=', 'Sales')])
+              subtype_id = self.env['mail.message.subtype'].search([('name', '=', 'Discussions')]).id
+              mail_message_vals = {'message_type': 'comment',
+                         'body': 'Sale Order Number' + ' ' + rec.name.name + ' ' + 'waiting for confirm' + ' ' + 'in Job Order NO' + ' ' + self.job_no,
+                         'res_id': user_ids.id,
+                         'subtype_id': subtype_id,
+                         'model': 'mail.channel',
+                         'channel_ids': [(6, 0, user_ids.ids)],
+
+                         }
+
+
+
+                      # def generate_sale_order(self):
+  #     sale_order_lines_vals = []
+  #     if not self.service_flag:
+  #         sale_order_vals = {
+  #             'partner_id': self.customer_id.id,
+  #             # 'service_type': self.service_type,
+  #             'job_order_id': self.id,
+  #         }
+  #         self.sales_id = self.env['sale.order'].create(sale_order_vals)
+  #         sale_order_job = {
+  #             'name': self.sales_id.id,
+  #             'job_order_id': self.id,
+  #         }
+  #         self.env['sale.order.job'].create(sale_order_job)
+  #         sale_order_lines_vals.append((0, 0, {
+  #             'job_order_id': self.id,
+  #             'order_id': self.sales_id.id,
+  #             'product_id': self.product_service,
+  #             'product_uom_qty': 1,
+  #             #'price_unit': self.total_service_cost_eur,
+  #         }))
+  #         self.sales_id.order_line = sale_order_lines_vals
+  #         self.service_flag = True
+  # @api.onchange('customer_id')
+  # def _get_description(self):
+  #     self.name = ("Job Order")
+
+  @api.model
+  def compute_days_left(self):
+      for order_ids in self.search([]):
+          for order in order_ids:
+              today_time = datetime.strptime(str(fields.datetime.today()), '%Y-%m-%d %H:%M:%S.%f')
+              myFormat = "%Y-%m-%d %H:%M:%S"
+              today_time.strftime(myFormat)
+              if order.end_date:
+                  end_date = datetime.strptime(str(order.end_date), '%Y-%m-%d %H:%M:%S')
+                  order.days_left = (end_date - today_time).days
+
+  # @api.one
+  # def get_totals(self):
+  #     tot_cost = 0
+  #     amount = 0
+  #     total_amount = 0
+  #     total_subtotal = 0
+  #     for spare in self.spare_part_details_ids:
+  #         returned = spare.returned
+  #         if spare.return_qty:
+  #             qty = spare.qty - spare.return_qty
+  #             amount = qty * spare.uprice
+  #             total_amount += amount
+  #         else:
+  #             subtotal = spare.subtotal
+  #             total_subtotal += subtotal
+  #             self.total_spare_cost = total_subtotal + total_amount
+  #             self.total_cost = self.total_spare_cost
+  @api.one
+  def get_totals(self):
+      tot_cost = 0
+      amount = 0
+      total_amount = 0
+      total_subtotal = 0
+      total_subtotal_cost= 0
+      total_amount_s = 0
+      total_subtotal_s = 0
+      total_subtotal_cost_s =0
+      # self.total_service_cost = self.total_service
+      # if self.machine_location_id:
+      #     eur_cost = self.env['job.location'].search([('name', '=', self.machine_location_id.id)]).cost
+      #     if eur_cost:
+      #         self.total_service_cost_eur = eur_cost*self.num_days
+      for spare in self.spare_part_details_ids:
+          returned = spare.returned
+          if spare.return_qty:
+              qty = spare.qty - spare.return_qty
+              amount = qty * spare.uprice
+              total_amount += amount
+          else:
+              subtotal_sp = spare.subtotal
+              subtotalSP = spare.cost_subtotal
+              total_subtotal += subtotal_sp
+              total_subtotal_cost += subtotalSP
+              self.total_cost = total_subtotal + total_amount
+              self.total_cost2 = total_subtotal_cost
+              self.total_job_profit = self.total_cost - self.total_cost2
+
+      # for service in self.Service_detail:
+      #     print("wwwwwwwwwwwwwwwwwwwww")
+      #     subtotal_se = service.subtotal_se
+      #     subtotalSE = service.cost_subtotal
+      #     total_subtotal_s += subtotal_se
+      #     total_subtotal_cost_s += subtotalSE
+      #     self.total_cost2_ser = total_subtotal + total_amount
+      #     self.total_cost2_ser = total_subtotal_cost
+
+
+
+
+
+
+  # Cancel Job
+  def job_inspection(self):
+      self.state = 'vehicle inspection'
+      # Update footer message
+      message_obj = self.env['mail.message']
+      message = _("State Changed  vehicle inspection -> <em>%s</em>.") % (self.state)
+      msg_id = self.message_post(body=message)
+ # Job sequence
+  @api.model
+  def create(self, vals):
+      res = super(JobOrder, self).create(vals)
+      next_seq = self.env['ir.sequence'].get('workshop.job.no')
+      res.update({'job_no': next_seq})
+      return res
+
+  @api.one
+  def diagnose(self):
+      self.state = 'diagnose'
+      # Update footer message
+      message_obj = self.env['mail.message']
+      message = _("State Changed  diagnose -> <em>%s</em>.") % (self.state)
+      msg_id = self.message_post(body=message)
+
+  # Cancel Job
+  @api.one
+  def job_reset(self):
+      if  self.state =='supply' or self.state == 'diagnose':
+          self.state = 'job order'
+          # Update footer message
+          message_obj = self.env['mail.message']
+          message = _("State Changed  Cancel -> <em>%s</em>.") % (self.state)
+          msg_id = self.message_post(body=message)
+
+
+  @api.multi
+  def job_supply(self):
+      if self.spare_part_details_ids_2:
+          self.state = 'supply'
+          # Update footer message
+          message_obj = self.env['mail.message']
+          message = _("State Changed  Supply -> <em>%s</em>.") % (self.state)
+          msg_id = self.message_post(body=message)
+
+      else:
+          raise UserError(_("You must get  supplements First"))
+
+      # return  {
+      #           'type': 'ir.actions.act_window',
+      #
+      #            'res_model': 'wizard.add.spare',
+      #
+      #            'view_mode': 'form',
+      #
+      #            'view_type': 'form',
+      #
+      #
+      #  'target': 'new',
+      #
+      #    }
+
+
+class sevice(models.Model):
+    _name = 'service.service'
+    _description = ""
+
+    job_order_id = fields.Many2one('job.order', 'Job Order', ondelete='cascade')
+    # pricelist = fields.Many2one('product.pricelist', string='Pricelist', required=False,
+                                # )
+    name = fields.Many2one('product.product',domain=[('type', '=', 'service')],stirng='Service' )
+    description = fields.Text('Description', required=True)
+    qty = fields.Float('Requested Qty')
+    uprice = fields.Float('Unit Price', related='name.lst_price')
+    ucost = fields.Float('Unit Cost', related='name.standard_price')
+    cost_subtotal = fields.Float('Cost Subtotal', compute='get_cost_total')
+    subtotal_se = fields.Float('Subtotal', compute='get_total')
+
+    @api.onchange('name')
+    def get_decription(self):
+        if self.name:
+            self.description = self.name.description_en
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    def get_total(self):
+        if self.name and self.qty and self.uprice:
+            self.subtotal_se = self.qty * self.uprice
+
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    def get_cost_total(self):
+        if self.name and self.qty and self.uprice:
+            self.cost_subtotal = self.qty * self.ucost
+class labour(models.Model):
+    _name = 'labour.labour'
+    _description = ""
+
+    job_order_id = fields.Many2one('job.order', 'Job Order', ondelete='cascade')
+    name = fields.Many2one('product.product',domain=[('type', '=', 'service')],stirng='Service' )
+    # pricelist = fields.Many2one('product.pricelist', string='Pricelist', required=False, readonly=True,
+    #                             )
+    l_name = fields.Many2one('res.partner', string='Vendor')
+    description = fields.Text('Description', required=True)
+    qty = fields.Float('Requested Qty')
+    uprice = fields.Float('Unit Price', related='name.lst_price')
+    ucost = fields.Float('Unit Cost')
+    cost_subtotal = fields.Float('Cost Subtotal', compute='get_cost_total')
+    subtotal_se = fields.Float('Subtotal', compute='get_total')
+    bill_ref=fields.Many2one('account.invoice','Vendor Bill Ref.')
+    bill_generated=fields.Boolean('Bills generated',default=False)
+
+    @api.onchange('name')
+    def get_decription(self):
+        if self.name:
+            self.description = self.name.description_en
+
+    @api.multi
+    def generate_bill(self):
+        bill_obj=self.env['account.invoice']
+        bill_id=bill_obj.create({
+            'partner_id':self.l_name.id ,
+            'invoice_line_ids':[(0, 0,{
+                'product_id':self.name.id,
+                'name':self.name.name,
+                'quantity':self.qty,
+                'price_unit':self.ucost,
+                'account_id':self.name.property_account_expense_id.id
+            })]
+        })
+        self.write({'bill_ref': bill_id.id})
+        self.bill_generated=True
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    # @api.onchange('name','qty','uprice')
+    def get_total(self):
+        if self.name and self.qty and self.uprice:
+            self.subtotal_se = self.qty * self.uprice
+
+    # @api.one
+    # @api.depends('name', 'qty', 'uprice')
+    @api.onchange('qty')
+    def get_cost_total(self):
+        if self.name and self.qty and self.uprice:
+            self.cost_subtotal = self.qty * self.ucost
+
+class SparePart(models.Model):
+    _name = 'spare.part'
+    _description = 'Spare part(s) from warehouse'
+
+    job_order_id = fields.Many2one('job.order', 'Job Order',  ondelete='cascade')
+    lot_id = fields.Many2one('stock.production.lot', 'Manufacturer Part.NO',
+                             help="Specify Lot/Serial Number ")
+    # product_id = fields.Many2one('product.product', string='Product', domain=[('sale_ok', '=', True)],
+    #                          change_default=True, ondelete='restrict')
+    pricelist = fields.Many2one('product.pricelist', string='Pricelist'
+                                )
+    name = fields.Many2one('product.product',string='Name',)
+    # spare_qty = fields.Many2one( 'stock.change.product.qty', 'Spare Part', )
+    l_name = fields.Many2one('res.partner', string='Vendor')
+    uqty = fields.Float('Available Qty', related='name.qty_available' )
+    description = fields.Text('Description', required=True)
+    qty = fields.Float('Requested Qty')
+    delivered = fields.Boolean('Delivered?')
+    notes = fields.Char('Notes')
+    ucost = fields.Float('Unit Cost', related='name.standard_price')
+    uprice = fields.Float('Unit Price', related='name.lst_price')
+    subtotal = fields.Float('Subtotal', compute='get_total')
+    cost_subtotal = fields.Float('Cost Subtotal', compute='get_cost_total')
+    spare_purchase_id = fields.Many2one('wizard.get.spare', 'Add Spare')
+    #picking_id = fields.Many2one('stock.picking', 'Picking Reference', readonly=True)
+    wiz_spare_id = fields.Many2one('wizard.add.spare', 'Add Spare')
+    return_qty = fields.Float('Return Qty',store= True)
+    returned = fields.Boolean('Returned')
+    @api.onchange('name')
+    def get_decription(self):
+        if self.name:
+            self.description = self.name.description_en
+
+    @api.onchange('lot_id')
+    def get_product(self):
+        if self.lot_id:
+            self.name = self.lot_id.product_id
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    def get_total(self):
+        if self.name and self.qty and self.uprice:
+            self.subtotal = self.qty * self.uprice
+
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    def get_cost_total(self):
+        if self.name and self.qty and self.uprice:
+            self.cost_subtotal = self.qty * self.ucost
+
+
+class SparePart(models.Model):
+    _name = 'spare.par'
+    _description = 'Spare part(s) '
+
+    job_order_id = fields.Many2one('job.order', 'Job Order',  ondelete='cascade')
+    name = fields.Many2one('product.product',string='Spare Part',)
+    # spare_qty = fields.Many2one( 'stock.change.product.qty', 'Spare Part', )
+    uqty = fields.Float( 'Available Qty', related='name.qty_available' )
+    description = fields.Text('Description', related='name.description_sale')
+    qty = fields.Float('Requested Qty')
+    delivered = fields.Boolean('Delivered?')
+    notes = fields.Char('Notes')
+    ucost = fields.Float('Unit Cost', related='name.standard_price')
+    uprice = fields.Float('Unit Price', related='name.lst_price')
+    subtotal = fields.Float('Subtotal', compute='get_total')
+    cost_subtotal = fields.Float('Cost Subtotal', compute='get_cost_total')
+    #picking_id = fields.Many2one('stock.picking', 'Picking Reference', readonly=True)
+    wiz_spare_id = fields.Many2one('wizard.add.spare', 'Add Spare')
+
+    return_qty = fields.Float('Return Qty',store= True)
+    returned = fields.Boolean('Returned')
+    type=fields.Selection([('insource','In-source'),('outsource','Out-Source')],'type')
+
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    def get_total(self):
+        if self.name and self.qty and self.uprice:
+            self.subtotal = self.qty * self.uprice
+
+    @api.one
+    @api.depends('name', 'qty', 'uprice')
+    def get_cost_total(self):
+        if self.name and self.qty and self.uprice:
+            self.cost_subtotal = self.qty * self.ucost
+
+
+class SaleOrderJob(models.Model):
+    _name = 'sale.order.job'
+
+    name = fields.Many2one('sale.order')
+    job_order_id = fields.Many2one('job.order')
+
+class PurchaseOrderJob(models.Model):
+    _name = 'purchase.order.job'
+    name = fields.Many2one('purchase.order')
+    job_order_id = fields.Many2one('job.order')
+
+
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
+
+    # product_id = fields.Many2one('product.product', string='OE Part Number', domain=[('purchase_ok', '=', True)],
+    #                                  change_default=True, required=True)
+    lot_id = fields.Many2one('stock.production.lot', 'Manufacturer Part.NO',
+                                 help="Specify Lot/Serial Number to focus your inventory on a particular Lot/Serial Number.")
+
+class SaleOrderLine(models.Model):
+
+    _inherit = 'sale.order.line'
+
+    service_order_id = fields.Many2one('job.order', string='Service')
+    job_order_id2 = fields.Many2one('job.order', string='Job Order2' )
+    pricelist = fields.Many2one('product.pricelist', string='Pricelist', readonly=True,
+                                   states={'draft': [('readonly', False)], 'sent': [('readonly', False)]},
+
+                                   )
+    lot_id = fields.Many2one('stock.production.lot', 'Manufacturer Part.NO',
+                             help="Specify Lot/Serial Number ")
+    product_id = fields.Many2one('product.product', string='Product', domain=[('sale_ok', '=', True)],
+                                  change_default=True, ondelete='restrict')
+    brand_id = fields.Many2one('parts.brands', 'Brand')
+    name = fields.Text(string='Description', required=True)
+
+    @api.onchange('product_id')
+    def get_name(self):
+        if self.product_id:
+            self.name = self.product_id.description_en
+    @api.onchange('product_id')
+
+    def _onchange_cost(self):
+        # for rec in self:
+        if self.lot_id:
+            print('bb')
+            self.product_id.list_price = self.lot_id.lot_price
+            print(self.product_id.list_price)
+
+
+    @api.onchange('lot_id')
+    def get_product(self):
+        if self.lot_id:
+            print("oiiiiiiiiiiiiiiiiiiriii")
+            self.product_id=self.lot_id.product_id
+            # self.product_id.lst_price = self.lot_id.unit_price
+
+    
+
+    def _get_display_price(self, product):
+        super()._get_display_price(product)
+        if self.pricelist.id:
+        # TO DO: move me in master/saas-16 on sale.order
+        # awa: don't know if it's still the case since we need the "product_no_variant_attribute_value_ids" field now
+        # to be able to compute the full price
+        # if self.product_no_variant_attribute_value_ids:
+        #     product = product.with_context(no_variant_attributes_price_extra=[
+        #         no_variant_attribute_value.price_extra or 0
+        #         for no_variant_attribute_value in self.product_no_variant_attribute_value_ids
+        #         ])
+
+         if self.pricelist.discount_policy == 'with_discount':
+             return product.with_context(pricelist=self.pricelist.id).price
+         product_context = dict(self.env.context, partner_id=self.order_id.partner_id.id, date=self.order_id.date_order,
+                                uom=self.product_uom.id)
+
+         final_price, rule_id = self.pricelist.with_context(product_context).get_product_price_rule(
+            self.product_id, self.product_uom_qty or 1.0, self.order_id.partner_id)
+         base_price, currency = self.with_context(product_context)._get_real_price_currency(product, rule_id,
+                                                                                           self.product_uom_qty,
+                                                                                           self.product_uom,
+                                                                                           self.order_id.pricelist_id.id)
+         if currency != self.pricelist.currency_id:
+            base_price = currency._convert(
+                base_price, self.pricelist.currency_id,
+                self.order_id.company_id, self.order_id.date_order or fields.Date.today())
+        # negative discounts (= surcharge) are included in the display price
+         return {}
+
+        # else:
+        #     raise UserError(_("select PriceList First"))
+
+    @api.onchange('product_uom_qty', 'product_uom', 'route_id')
+    def _onchange_product_id_check_availability(self):
+        if not self.product_id or not self.product_uom_qty or not self.product_uom:
+            self.product_packaging = False
+            super()._onchange_product_id_check_availability()
+            return {}
+        if self.lot_id:
+           if self.product_uom_qty > self.lot_id.product_qty:
+              message = _('You plan to sell %s quantity but you only have %s available in  warehouse.') % \
+                         (self.product_uom_qty, self.lot_id.product_qty)
+              mess = {
+               'title': _('Not enough inventory!'),
+               'message': message
+               }
+              return {'warning': mess}
+
+
+
+
+
+# class ProductionLot(models.Model):
+#     _inherit = "stock.production.lot"
+#     brand_id = fields.Many2one('parts.brands', 'Brand', required=True)
+#     lot_price = fields.Float('Price USD')
+#     unit_price = fields.Float('USD Unit Cost Price')
+#     sdg_price = fields.Float('SDG Unit Cost Price')
+#     aed_price = fields.Float('AED Unit Cost Price')
+#     eur_price = fields.Float('EUR Unit Cost Price')
+#
+#     #price list
+#     first_sdg_price = fields.Float('25% SDG Sale Price')
+#     second_sdg_price = fields.Float('35% SDG Sale Price')
+#     first_usd_price = fields.Float('25% USD Sale Price')
+#     second_usd_price = fields.Float('35% USD Sale Price')
+
+
+
+
+
+class JobStatus(models.Model):
+    _name = 'job.status'
+    #_inherit = 'fleet.service.type'
+    color = fields.Integer('Color')
+    name = fields.Selection([('late', 'Late'), ('in_progress', 'In Progress'), ('done', 'Done')],
+                                  string='Job Status')
+    count_late = fields.Integer(compute='_compute_count_jobs')
+    count_progress = fields.Integer(compute='_compute_count_jobs')
+    count_draft = fields.Integer(compute='_compute_count_jobs')
+    count_confirm = fields.Integer(compute='_compute_count_jobs')
+    count_approve = fields.Integer(compute='_compute_count_jobs')
+    count_fixed = fields.Integer(compute='_compute_count_jobs')
+    count_done = fields.Integer(compute='_compute_count_jobs')
+    status = fields.Selection([('late', 'Late'), ('progress', 'Progress'), ('done', 'Done')], 'Status')
+    job_order_ids = fields.One2many('job.order','job_status_id','Job Order')
+
+
+    @api.model
+    def get_job_status(self):
+        for record in self.search([]):
+            print (record)
+            job_order_ids = self.env['job.order'].search([])
+            for rec in job_order_ids:
+                today_time = datetime.strptime(str(fields.datetime.today()), '%Y-%m-%d %H:%M:%S.%f')
+                myFormat = "%Y-%m-%d %H:%M:%S"
+                today_time.strftime(myFormat)
+                end_date = datetime.strptime(rec.end_date, '%Y-%m-%d %H:%M:%S')
+                diff_days = (today_time - end_date).days
+
+                if diff_days > 0 and rec.state != 'supply':
+                    record.status = 'late'
+                    rec.diff_days = diff_days
+                elif diff_days <= 0 and rec.state != 'supply':
+                    record.status = 'progress'
+                    rec.diff_days = diff_days
+                elif rec.state == 'supply':
+                    record.status = 'supply'
+                    rec.diff_days = diff_days
+
+    @api.multi
+    def _get_action(self, action_xmlid):
+        action = self.env.ref(action_xmlid).read()[0]
+        if self:
+            action['status'] = self.status
+        return action
+
+    @api.multi
+    def get_late_jobs(self):
+        return self._get_action('is_power_master.get_late_action')
+
+    @api.multi
+    def get_draft_jobs(self):
+        return self._get_action('is_power_master.get_draft_job_action')
+
+    @api.multi
+    def get_confirm_jobs(self):
+        return self._get_action('is_power_master.get_late_confirm_job_action')
+
+    @api.multi
+    def get_approve_jobs(self):
+        return self._get_action('is_power_master.get_approve_job_action')
+
+    # @api.multi
+    # def get_fixed_jobs(self):
+    #     return self._get_action('is_power_master.get_fixed_job_action')
+############################################################################
+    @api.multi
+    def get_pro_jobs(self):
+        return self._get_action('is_power_master.get_pro_jobs')
+
+    @api.multi
+    def get_draft_prog_jobs(self):
+        return self._get_action('is_power_master.get_draft_prog_jobs')
+
+    @api.multi
+    def get_confirm_prog_jobs(self):
+        return self._get_action('is_power_master.get_confirm_prog_jobs')
+
+    @api.multi
+    def get_approve_prog_jobs(self):
+        return self._get_action('is_power_master.get_approve_prog_jobs')
+
+    # @api.multi
+    # def get_fixed_prog_jobs(self):
+    #     return self._get_action('is_power_master.get_fixed_prog_jobs')
+###############################################################################
+    # @api.multi
+    # def get_done_jobs(self):
+    #     return self._get_action('is_frentec_maintence_10.get_progress_job_action')
+
+    @api.multi
+    def get_done_jobs(self):
+        return self._get_action('is_power_master.get_done_job_action')
+
+    # @api.multi
+    # def get_contract_terminated(self):
+    #     return self._get_action('is_frentec_maintence_10.get_contract_terminated_action')
+    #
+    # @api.multi
+    # def get_contract_to_approve(self):
+    #     return self._get_action('is_frentec_maintence_10.get_contract_to_approve_action')
+    #
+    # @api.multi
+    # def get_fleet_renew_contract(self):
+    #     return self._get_action('is_frentec_maintence_10.get_fleet_renew_contract_action')
+    #
+    # @api.multi
+    # def get_fleet_end_contract(self):
+    #     return self._get_action('is_frentec_maintence_10.get_fleet_end_contract_action')
+
+    @api.multi
+    def _compute_count_jobs(self):
+        for rec in self:
+            count_draft = 0
+            count_late_draft = 0
+            count_late_confirm = 0
+            count_pro_confirm = 0
+            count_late_approve = 0
+            count_late_fix = 0
+            count_pro_fix = 0
+            count_pro_approve = 0
+            count_pro_draft = 0
+            count_confirm = 0
+            count_approve = 0
+            count_fixed = 0
+            count_done = 0
+            job_late = self.env.ref('is_frentec_maintence_10.job_late')
+            job_in_progress = self.env.ref('is_frentec_maintence_10.job_in_progress')
+            job_done = self.env.ref('is_frentec_maintence_10.job_done')
+            draft_jobs = self.env['job.order'].search([('state', '=', 'draft')])
+            done_jobs = self.env['job.order'].search([('state', '=', 'done')])
+            confirm_jobs = self.env['job.order'].search([('state', '=', 'confirm')])
+            approve_jobs = self.env['job.order'].search([('state', '=', 'approve')])
+            fix_jobs = self.env['job.order'].search([('state', '=', 'fixed')])
+            in_progress_jobs = self.env['job.order'].search([('state', 'not in', ('draft', 'done'))])
+            if draft_jobs:
+                for draft_id in draft_jobs:
+                    if draft_id.days_left <= 0:
+                        count_late_draft += 1
+                    if draft_id.days_left > 0:
+                        count_pro_draft += 1
+                job_late.count_draft = count_late_draft
+                job_in_progress.count_draft = count_pro_draft
+
+            if confirm_jobs:
+                for confirm_id in confirm_jobs:
+                    if confirm_id.days_left <= 0:
+                        count_late_confirm += 1
+                    if confirm_id.days_left > 0:
+                        count_pro_confirm += 1
+            job_late.count_confirm = count_late_confirm
+            job_in_progress.count_confirm = count_pro_confirm
+            if approve_jobs:
+                for approve_id in approve_jobs:
+                    if approve_id.days_left <= 0:
+                        count_late_approve += 1
+                    if approve_id.days_left > 0:
+                        count_pro_approve += 1
+            job_late.count_approve = count_late_approve
+            job_in_progress.count_approve = count_pro_approve
+            if fix_jobs:
+                for fix_id in fix_jobs:
+                    if fix_id.days_left <= 0:
+                        count_late_fix += 1
+                    if fix_id.days_left > 0:
+                        count_pro_fix += 1
+            job_late.count_fixed = count_late_fix
+            job_in_progress.count_fixed = count_pro_fix
+
+            if done_jobs:
+                for job in done_jobs:
+                    count_done += 1
+                job_done.count_done = count_done
+
+            job_late.count_late = count_late_draft + count_late_confirm + count_late_approve + count_late_fix
+            job_in_progress.count_progress = count_pro_draft + count_pro_confirm + count_pro_approve + count_pro_fix

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--Loan Tree view-->
+    <record id="hr_loan_tree_view" model="ir.ui.view">
+        <field name="name">hr.loan.tree</field>
+        <field name="model">hr.loan</field>
+        <field name="arch" type="xml">
+            <tree string="Loan Requests">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="loan_amount"/>
+                <field name="date"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Loan Form view-->
+    <record id="hr_loan.hr_loan_form_view" model="ir.ui.view">
+        <field name="name">hr.loan.form</field>
+        <field name="model">hr.loan</field>
+        <field name="arch" type="xml">
+            <form string="Loan Request">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" states="draft" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="submit" />
+
+                    <button name="action_hr_approve" type="object" string="HR Approve"
+                            states="submit" class="oe_highlight" groups="hr_loan.group_loan_hr"/>
+
+                    <button name="action_account_approve" type="object"
+                            string="Account Approve" states="hr_approve" class="oe_highlight"
+                            groups="hr_loan.group_loan_account"/>
+
+                    <button name="action_gm_approve" type="object"
+                            string="GM Approve" states="account_approve" class="oe_highlight"
+                            groups="hr_loan.group_loan_gm"/>
+
+                    <button name="action_running" type="object"
+                            string="Pay Loan" states="approve" class="oe_highlight"
+                            groups="hr_loan.group_loan_account"/>
+
+
+                    <button name="action_refuse" type="object" string="Refuse"
+                            states="submit,hr_approve,account_approve" class="oe_highlight"
+                            groups="hr_loan.group_loan_hr,hr_loan.group_loan_gm,hr_loan.group_loan_account"/>
+
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submit,approve,running,paid" />
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group col="4">
+                        <field name="employee_id"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="date"/>
+                        <field name="department_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="job_position" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="loan_amount" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="installment" attrs="{'readonly':[('state','in',['approve', 'running', 'paid'])]}"/>
+                        <field name="payment_date" attrs="{'readonly':[('state','in',['approve', 'running', 'paid'])]}"/>
+                        <field name="emp_account_id"  attrs="{'invisible':[('state', '=','draft')], 'readonly':[('state','in',['running', 'paid'])]}"/>
+                        <field name="treasury_account_id"  attrs="{'invisible':[('state', '=','draft')], 'readonly':[('state','in',['running', 'paid'])]}"/>
+                        <field name="journal_id"
+                               attrs="{'invisible':[('state', '=','draft')], 'readonly':[('state','in',['running', 'paid'])]}"/>
+                        <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                    </group>
+                    <notebook>
+                        <page string="Installments">
+                            <field name="loan_lines" attrs="{'readonly':[('state','in',['approve', 'running', 'paid'])]}">
+                                <tree string="Installments" editable="bottom">
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="paid" readonly="1" invisible="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" >
+                                <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="total_paid_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="balance_amount" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <button type="object" name="compute_installment" string="Compute Installment"
+                                    colspan="2" attrs="{'invisible':[('state','in', ['approve', 'running', 'paid'])]}"
+                                    groups="hr_loan.group_loan_account" class="oe_stat_button"
+                                    icon="fa-clock-o"/>
+                            <div class="oe_clear"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--loan search view-->
+    <record id="hr_loan.view_loan_request_search_form" model="ir.ui.view">
+        <field name="name">hr.loan.search.form</field>
+        <field name="model">hr.loan</field>
+        <field name="arch" type="xml">
+            <search string="Loan">
+                <filter string="My Loans" name="myloan" domain="[('employee_id.user_id.id', '=', uid)]" />
+                <filter string="For HR" name="hr" domain="[('state', '=', 'submit')]" />
+                <filter string="For Account" name="account" domain="[('state', 'in', ['hr_approve', 'approve'])]" />
+                <filter string="For GM" name="gm" domain="[('state', 'in', ['account_approve'])]" />
+                <field name="employee_id" string="Employee"/>
+                <field name="department_id" string="Department"/>
+                <filter string="Employee" name="employee_id" context="{'group_by':'employee_id'}"/>
+                <filter string="Department" name="department_id" context="{'group_by':'department_id'}"/>
+                <filter string="Status" name="status" context="{'group_by':'state'}"/>
+            </search>
+        </field>
+    </record>
+
+
+    <!--loan menu-->
+    <menuitem name="Loans"
+              id="menu_hr_loans_and_advances" web_icon="hr_loan,static/description/loan_web.png"
+              sequence="20"/>
+
+    <record id="hr_loan.action_hr_loan_request" model="ir.actions.act_window">
+        <field name="name">Loan Requests</field>
+        <field name="res_model">hr.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_myloan': 1}</field>
+        <field name="search_view_id" ref="hr_loan.view_loan_request_search_form"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Loan request.
+            </p><p>
+            Use this menu to create loan requests.
+        </p>
+        </field>
+    </record>
+
+    <menuitem name="Loan Requests"
+              id="menu_base_hr_loan_request"
+              parent = "hr_loan.menu_hr_loans_and_advances"
+              sequence="1"/>
+
+    <menuitem name="Loan Requests"
+              parent="hr_loan.menu_base_hr_loan_request"
+              id="menu_hr_loan_request"
+              action="hr_loan.action_hr_loan_request"
+              sequence="1"
+    />
+
+
+    <!-- HR MENU -->
+    <record id="hr_loan.action_hr_loan_request_hr" model="ir.actions.act_window">
+        <field name="name">HR Approve</field>
+        <field name="res_model">hr.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_hr': 1}</field>
+        <field name="search_view_id" ref="hr_loan.view_loan_request_search_form"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Loan request.
+            </p><p>
+            Use this menu to create loan requests.
+        </p>
+        </field>
+    </record>
+    <menuitem name="HR Approve"
+              parent="hr_loan.menu_base_hr_loan_request"
+              id="menu_hr_loan_request_hr"
+              action="hr_loan.action_hr_loan_request_hr"
+              sequence="2"
+              groups="hr_loan.group_loan_hr"
+    />
+
+    <!-- Account MENU -->
+    <record id="hr_loan.action_hr_loan_request_account" model="ir.actions.act_window">
+        <field name="name">Account Approve</field>
+        <field name="res_model">hr.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_account': 1}</field>
+        <field name="search_view_id" ref="hr_loan.view_loan_request_search_form"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Loan request.
+            </p><p>
+            Use this menu to create loan requests.
+        </p>
+        </field>
+    </record>
+    <menuitem name="Account Approve"
+              parent="hr_loan.menu_base_hr_loan_request"
+              id="menu_hr_loan_request_account"
+              action="hr_loan.action_hr_loan_request_account"
+              sequence="3"
+              groups="hr_loan.group_loan_account"
+    />
+
+    <!-- GM MENU -->
+
+    <record id="hr_loan.action_hr_loan_request_gm" model="ir.actions.act_window">
+        <field name="name">GM Approve</field>
+        <field name="res_model">hr.loan</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_gm': 1}</field>
+        <field name="search_view_id" ref="hr_loan.view_loan_request_search_form"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new Loan request.
+            </p><p>
+            Use this menu to create loan requests.
+        </p>
+        </field>
+    </record>
+    <menuitem name="GM Approve"
+              parent="hr_loan.menu_base_hr_loan_request"
+              id="menu_hr_loan_request_gm"
+              action="hr_loan.action_hr_loan_request_gm"
+              sequence="3"
+              groups="hr_loan.group_loan_gm"
+    />
+
+
+    <!-- Shortcuts -->
+    <record id="act_hr_employee_loan_request" model="ir.actions.act_window">
+        <field name="name">Loans</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.loan</field>
+        <field name="src_model">hr.employee</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_myloan': 1}</field>
+        <field name="view_id" eval="hr_loan_tree_view"/>
+    </record>
+
+
+    <!-- HR employee inherit Loans -->
+    <record id="view_employee_form_loan_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.loan.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="%(hr_loan.act_hr_employee_loan_request)d"
+                        type="action"
+                        class="oe_stat_button"
+                        icon="fa-calendar"
+                        groups="(hr_loan.group_loan_hr">
+                    <field name="loan_count" widget="statinfo" string="Loans"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

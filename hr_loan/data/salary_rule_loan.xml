@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!--Adding a salary rule for loan-->
+	<data noupdate="0">
+
+		<record id="hr_rule_loan" model="hr.salary.rule">
+            <field name="code">LO</field>
+            <field name="name">Loan</field>
+            <field name="category_id" ref="hr_payroll_customize.INCDED"/>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = inputs.LO and - (inputs.LO.amount)</field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="sequence" eval="301"/>
+        </record>
+        <!-- add to salary structure-->
+        <record id="hr_payroll_customize.school_structure_base" model="hr.payroll.structure">
+            <field eval="[(4, ref('hr_rule_loan'))]" name="rule_ids"/>
+        </record>
+        <record id="hr_rule_input_loan" model="hr.rule.input">
+            <field name="code">LO</field>
+            <field name="name">Loan</field>
+            <field name="input_id" ref="hr_rule_loan"/>
+        </record>
+
+	</data>
+</odoo>

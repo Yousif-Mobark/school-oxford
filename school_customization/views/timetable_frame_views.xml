@@ -1,0 +1,186 @@
+<odoo>
+
+    <menuitem id="menu_timetable_menu" name="Timetables"
+              sequence="29"
+              parent="openeducat_core.menu_op_school_root"/>
+
+
+
+
+    <!--
+
+
+    STUDENT
+
+
+
+     -->
+
+
+    <record id="timetable_student_form_view" model="ir.ui.view">
+        <field name="name">timetable.student.form</field>
+        <field name="model">timetable.student</field>
+        <field name="arch" type="xml">
+            <form string="Student Timetable" version="7.0"  create="false">
+                <center>
+                    <iframe
+                            src="/school_customization/static/timetables/student.pdf"
+                            marginwidth="0"
+                            marginheight="0" frameborder="no"
+                            style="height: 600px; width: 100%; border-width:0px;">
+                    </iframe>
+                </center>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="timetable_student_action" model="ir.actions.act_window">
+        <field name="name">Student Timetable</field>
+        <field name="res_model">timetable.student</field>
+        <field name="view_type">form</field>
+        <field name="context">{}</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+
+                Add a new timetable
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_timetable_student_submenu" name="Student"
+              sequence="50"
+              parent="menu_timetable_menu"
+              action="timetable_student_action"
+              groups="openeducat_core.group_op_student"/>
+
+    <!-- in student menu also -->
+
+    <menuitem id="menu_timetable_student_1_submenu" name="Student Timetable"
+              sequence="50"
+              parent="openeducat_core.menu_op_student_root"
+              action="timetable_student_action"
+              groups="openeducat_core.group_op_student"/>
+
+    <!--
+
+
+                    Faculty
+
+
+
+                     -->
+
+    <record id="timetable_faculty_form_view" model="ir.ui.view">
+        <field name="name">timetable.faculty.form</field>
+        <field name="model">timetable.faculty</field>
+        <field name="arch" type="xml">
+            <form string="Student Timetable" version="7.0"  create="false">
+                <center>
+                    <iframe
+                            src="/school_customization/static/timetables/faculty.pdf"
+                            marginwidth="0"
+                            marginheight="0" frameborder="no"
+                            style="height: 600px; width: 100%; border-width:0px;">
+                    </iframe>
+                </center>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="timetable_faculty_action" model="ir.actions.act_window">
+        <field name="name">Faculty Timetable</field>
+        <field name="res_model">timetable.faculty</field>
+        <field name="view_type">form</field>
+        <field name="context">{}</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+
+                Add a new timetable
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_timetable_faculty_submenu" name="Faculty"
+              sequence="50"
+              parent="menu_timetable_menu"
+              action="timetable_faculty_action"
+              groups="openeducat_core.group_op_faculty"/>
+
+
+    <!-- in faculty menu also -->
+
+    <menuitem id="menu_timetable_faculty_1_submenu" name="Faculty Timetable"
+              sequence="50"
+              parent="openeducat_core.menu_op_faculty_root"
+              action="timetable_faculty_action"
+              groups="openeducat_core.group_op_faculty"/>
+
+    <!--
+
+
+                   Classroom
+
+
+
+                    -->
+
+    <record id="timetable_classroom_form_view" model="ir.ui.view">
+        <field name="name">timetable.classroom.form</field>
+        <field name="model">timetable.classroom</field>
+        <field name="arch" type="xml">
+            <form string="Student Timetable" version="7.0"  create="false">
+                <center>
+                    <iframe
+                            src="/school_customization/static/timetables/classroom.pdf"
+                            marginwidth="0"
+                            marginheight="0" frameborder="no"
+                            style="height: 600px; width: 100%; border-width:0px;">
+                    </iframe>
+                </center>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="timetable_classroom_action" model="ir.actions.act_window">
+        <field name="name">Classroom Timetable</field>
+        <field name="res_model">timetable.classroom</field>
+        <field name="view_type">form</field>
+        <field name="context">{}</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+
+                Add a new timetable
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_timetable_classroom_submenu" name="Classroom"
+              sequence="50"
+              parent="menu_timetable_menu"
+              action="timetable_classroom_action"
+              groups="openeducat_core.group_op_back_office_admin"/>
+
+
+
+    <!--
+                    Hide original timetable
+
+             -->
+    <menuitem id="openeducat_timetable.menu_op_timetable_root"
+              name="TimeTables"
+              sequence="90"
+              web_icon="openeducat_timetable,static/description/icon.png"
+              groups="base.group_no_one"/>
+</odoo>

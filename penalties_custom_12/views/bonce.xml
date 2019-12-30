@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- inherit view of payslip-->
+        <record id="view_bonce_inh_payslip_form" model="ir.ui.view">
+            <field name="name">payslip.bonce.payslips</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="bonce" string="Bonce" />
+                </xpath>
+                <xpath expr="//page[4]" position="after">
+                    <page string="Bonce Of Employee">
+                        <field name="bonce_line" nolabel="1" readonly="0">
+                            <tree>
+                                <field name="name"/>
+                                <field name="bonce_id"/>
+                                <field name="description"/>
+                                <field name="amount" sum="Total "/>
+                                <field name="date"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Form view of Employee Bonce -->
+        <record id="view_bonce_form" model="ir.ui.view">
+            <field name="name">bonce.bonce</field>
+            <field name="model">bonce.bonce</field>
+            <field name="arch" type="xml">
+                <form string="Employee Bonce">
+                    <header>
+                        <button name="action_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
+                        <button name="set_amount" type="object" string="Calc Amount" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('fix_formula', '=', 'fix')]}" class="oe_highlight"/>
+                        <button name="action_hr_approval" type="object" string="Hr Approval " states="confirm" class="oe_highlight"/>
+                        <button name="action_ceo_approve" type="object" string="CO Approval" states="hr_manager" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirm,hr_manager,done"/>
+                    </header>
+                    <sheet string="Employee Bonce ">
+                        <div>
+                            <h3><field name="bonce_no" readonly="1"/></h3>
+                        </div>
+                        <group string="Bonce">
+                            <group>
+                                <field name="employee" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                 <field name="amount" attrs="{'readonly': ['|', ('state', '!=', 'draft'), ('fix_formula', '!=', 'fix')]}"/>
+                            </group>
+                            <group>
+                                <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="bonce_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="fix_formula" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="voucher_ref" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- tree view of Employee Bonce -->
+        <record id="view_bonce_tree" model="ir.ui.view">
+            <field name="name">bonce.bonce</field>
+            <field name="model">bonce.bonce</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Bonce">
+                    <field name="name"/>
+                    <field name="employee"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of Bonce -->
+        <record id="action_bonce" model="ir.actions.act_window">
+            <field name="name">Bonce Bonce</field>
+            <field name="res_model">bonce.bonce</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_bonce" parent="hr_payroll.menu_hr_payroll_root" name="Employee Bonce" action="action_bonce"/>
+
+        <!-- form view of Employee Bonce Type-->
+        <record id="view_bonce_type_form" model="ir.ui.view">
+            <field name="name">bonce.type</field>
+            <field name="model">bonce.type</field>
+            <field name="arch" type="xml">
+                <form string="Employee Bonce">
+                    <sheet string="Bonce Type">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object"  class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <group string="Bonce Type" colspan="2" col="4">
+                            <field name="name"/>
+                            <field name="pay_included"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- tree view of  Bonce Type-->
+        <record id="view_bonce_type_tree" model="ir.ui.view">
+            <field name="name">bonce.Type</field>
+            <field name="model">bonce.type</field>
+            <field name="arch" type="xml">
+                <tree string="Bonce Type">
+                    <field name="name"/>
+                    <field name="pay_included"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of Bonce Type-->
+        <record id="action_bonce_type" model="ir.actions.act_window">
+            <field name="name">Bonce type</field>
+            <field name="res_model">bonce.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_employee_process" parent="hr.menu_hr_root" name="Employee Process"/>
+            <menuitem id="menu_bonce_type" parent="menu_employee_process" name="Bonce Type" action="action_bonce_type"/>
+    </data>
+</odoo>

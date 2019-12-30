@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+bonce_a,bonce_bonce,model_bonce_bonce,,1,1,1,1
+bonce_b,bonce_type,model_bonce_type,,1,1,1,1
+bonce_c,bonce_line,model_bonce_line,,1,1,1,1
+deduction_a,deduction_deduction,model_deduction_deduction,,1,1,1,1
+deduction_b,deduction_type,model_deduction_type,,1,1,1,1
+
+penal,penal_penal,model_penal_penal,,1,1,1,1
+penalties_c,hr_penalties,model_hr_penalties,,1,1,1,1
+employee_penalties,hr_hr_employee_penalties,model_hr_employee_penalties,,1,1,1,1
+employee_penalties_lines,hr_deduction_line,model_deduction_line,,1,1,1,1
+

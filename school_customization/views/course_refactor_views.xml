@@ -1,0 +1,121 @@
+
+<odoo>
+    <record id="view_op_media_form_inherit_grade" model="ir.ui.view">
+        <field name="name">op.media.form.inherit.grade</field>
+        <field name="model">op.media</field>
+        <field name="inherit_id" ref="openeducat_library.view_op_media_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='education_details']" position='replace'>
+                <page name="education_details" string="Education Details">
+                    <group colspan="4">
+                        <separator string="Grades"/>
+                        <separator string="Subjects"/>
+                        <field name="course_ids" nolabel="1" widget="many2many_tags"/>
+                        <field name="subject_ids" nolabel="1" widget="many2many_tags"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="openeducat_core.act_open_op_course_view">
+        <field name="name">Grades</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">op.course</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="openeducat_core.view_op_course_search"/>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="openeducat_core.menu_op_course_sub"
+              name="Grades"
+              parent="openeducat_core.menu_op_school_config_course"
+              sequence="10"
+              action="openeducat_core.act_open_op_course_view"
+              groups="openeducat_core.group_op_back_office,openeducat_core.group_op_back_office_admin"/>
+
+    <!--
+
+
+    filters
+
+    -->
+
+
+    <record id="view_op_admission_search_inherit_grade" model="ir.ui.view">
+        <field name="name">op.admission.search.inherit.grade</field>
+        <field name="model">op.admission</field>
+        <field name="inherit_id" ref="openeducat_admission.view_op_admission_search" />
+        <field name="arch" type="xml">
+            <filter name="group_by_adm_course_id"  position='replace'>
+                <filter string="Grade" name="group_by_adm_course_id"
+                        domain="[]" context="{'group_by':'course_id'}"/>
+            </filter>
+
+        </field>
+    </record>
+
+    <record id="view_op_attendance_register_search_inherit_grade" model="ir.ui.view">
+        <field name="name">op.attendance.register.search.inherit.grade</field>
+        <field name="model">op.attendance.register</field>
+        <field name="inherit_id" ref="openeducat_attendance.view_op_attendance_register_search" />
+        <field name="arch" type="xml">
+            <filter name="group_by_attendance_register_course"  position='replace'>
+                <filter string="Grade" name="group_by_attendance_register_course"
+                        domain="[]" context="{'group_by':'course_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+
+    <record id="view_op_attendance_line_search_inherit_grade" model="ir.ui.view">
+        <field name="name">op.attendance.line.search.inherit.grade</field>
+        <field name="model">op.attendance.line</field>
+        <field name="inherit_id" ref="openeducat_attendance.view_op_attendance_line_search" />
+        <field name="arch" type="xml">
+            <filter name="group_by_attendance_course"  position='replace'>
+                <filter string="Grade" name="group_by_attendance_course"
+                        domain="[]" context="{'group_by':'course_id'}"/>
+            </filter>
+        </field>
+    </record>
+    <record id="view_op_assignment_search_inherit_grade" model="ir.ui.view">
+        <field name="name">op.assignment.search.inherit.grade</field>
+        <field name="model">op.assignment</field>
+        <field name="inherit_id" ref="openeducat_assignment.view_op_assignment_search" />
+        <field name="arch" type="xml">
+            <filter name="group_by_assignment_course"  position='replace'>
+                <filter string="Grade" domain="[]" name="group_by_assignment_course"
+                        context="{'group_by':'course_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="view_op_session_search_inherit_grade" model="ir.ui.view">
+        <field name="name">op.session.search.inherit.grade</field>
+        <field name="model">op.session</field>
+        <field name="inherit_id" ref="openeducat_timetable.view_op_session_search" />
+        <field name="arch" type="xml">
+            <filter name="group_by_session_course_id"  position='replace'>
+                <filter string="Grade" name="group_by_session_course_id"
+                        domain="[]" context="{'group_by':'course_id'}"/>
+            </filter>
+        </field>
+    </record>
+
+<!--        <record id="_inherit_grade" model="ir.ui.view">-->
+<!--            <field name="name">.inherit.grade</field>-->
+<!--            <field name="model"></field>-->
+<!--            <field name="inherit_id" ref="openeducat_." />-->
+<!--            <field name="arch" type="xml">-->
+<!--                <filter name=""  position='replace'>-->
+
+<!--                </filter>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+</odoo>

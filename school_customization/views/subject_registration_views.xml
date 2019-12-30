@@ -1,0 +1,17 @@
+<odoo>
+
+
+<!--    <record id="view_subject_registration_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">op.subject.registration.form.inherit</field>-->
+<!--        <field name="model">op.subject.registration</field>-->
+<!--        <field name="inherit_id" ref="openeducat_core.view_subject_registration_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--&lt;!&ndash;            <xpath expr="//field[@name='elective_subject_ids']" position="replace">&ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="elective_subject_ids" widget="many2many_tags"&ndash;&gt;-->
+<!--&lt;!&ndash;                       domain="[('subject_type', '=', 'elective'),&ndash;&gt;-->
+<!--&lt;!&ndash;                       ('course_id.subject_ids.ids', 'in', id)]"&ndash;&gt;-->
+<!--&lt;!&ndash;                       attrs="{'readonly':[('state','!=','draft')]}"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

@@ -1,0 +1,322 @@
+
+<odoo>
+    <!--
+
+        Menu
+                -->
+
+    <menuitem id="menu_lesson_plans_submenu" name="Lesson Plans"
+              sequence="50"
+              parent="openeducat_core.menu_op_faculty_root"
+              groups="openeducat_core.group_op_faculty"
+
+    />
+
+    <!--
+                        Book Definition
+
+                                     -->
+
+    <record id="book_book_tree_view" model="ir.ui.view">
+        <field name="name">book.book.tree</field>
+        <field name="model">book.book</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="book_book_form_view" model="ir.ui.view">
+        <field name="name">book.book.form</field>
+        <field name="model">book.book</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="course_id" required="1"/>
+                        </group>
+                    </group>
+                    <group string="Chapters">
+                        <field name="chapter_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="number"/>
+                                <field name="name"/>
+                                <field name="content" />
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="number"/>
+                                    <field name="name"/>
+                                </group>
+                                <group>
+                                    <field name="content" />
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="book_book_action" model="ir.actions.act_window">
+        <field name="name">Books</field>
+        <field name="res_model">book.book</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a new book
+            </p>
+        </field>
+    </record>
+
+
+
+    <menuitem id="menu_book_book_submenu_action" name="Books"
+              sequence="10"
+              parent="menu_lesson_plans_submenu"
+              action="book_book_action"/>
+
+    <!--
+
+
+
+     yearly lesson plans
+
+
+
+    -->
+
+    <record id="lesson_plan_year_tree_view" model="ir.ui.view">
+        <field name="name">lesson.plan.year.tree</field>
+        <field name="model">year.plan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="faculty_id" />
+                <field name="course_id" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="lesson_plan_year_form_view" model="ir.ui.view">
+        <field name="name">lesson.plan.year.form</field>
+        <field name="model">year.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Submit"
+                            states="draft" type="object" name="action_submit"
+                    />
+                    <button string="Approve"
+                            states="submit" type="object" name="action_approve"
+                            groups="school_customization.group_op_coordinator"
+                    />  <button string="Reset to Draft"
+                                states="approve" type="object" name="action_set_draft"
+                />
+                    <field name="state" widget="statusbar" readonly="1" />
+
+                </header>
+                <sheet>
+                    <group>
+                        <group >
+                            <field name="faculty_id" required="1" options="{'no_create': True}"
+                                   attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="course_id"
+                                   attrs="{'readonly':[('state','!=','draft')]}"
+                                   required="1"/>
+                        </group>
+                        <group>
+                            <field name="book_id" required="1"
+                                   attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="subject_id" required="1"
+                                   attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                    </group>
+                    <group string="Plans">
+                        <field name="lines" nolabel="1" attrs="{'readonly':[('state','!=','draft')]}">
+                            <tree editable="top">
+                                <field name="book_id" />
+                                <field name="month" />
+                                <field name="chapter_id" options="{'no_create': True}" />
+                                <field name="due_date"/>
+                                <field name="topics" />
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="lesson_plan_year_action" model="ir.actions.act_window">
+        <field name="name">Year Plans</field>
+        <field name="res_model">year.plan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a Yearly Plan
+            </p>
+        </field>
+    </record>
+
+
+
+    <menuitem id="menu_action_lesson_plan_year" name="Year Plan"
+              sequence="10"
+              parent="menu_lesson_plans_submenu"
+              action="lesson_plan_year_action"/>
+
+    <!--
+
+     Month Plan
+
+     -->
+
+
+    <record id="lesson_plan_month_tree_view" model="ir.ui.view">
+        <field name="name">lesson.plan.month.tree</field>
+        <field name="model">month.plan</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="faculty_id" />
+                <field name="book_id" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="lesson_plan_month_form_view" model="ir.ui.view">
+        <field name="name">lesson.plan.month.form</field>
+        <field name="model">month.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Submit"
+                            states="draft" type="object" name="action_submit"
+                    />
+                    <button string="Approve"
+                            states="submit" type="object" name="action_approve"
+                            groups="school_customization.group_op_coordinator"
+                    />  <button string="Reset to Draft"
+                                states="approve" type="object" name="action_set_draft"
+                />
+                    <field name="state" widget="statusbar" readonly="1" />
+
+                </header>
+                <sheet>
+                    <group string="Plan Info">
+                        <group >
+                            <field name="faculty_id" required="1" options="{'no_create': True}"
+                                   attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="year_plan_id"
+                                   attrs="{'readonly':[('state','!=','draft')]}"
+                                   required="1"/>
+                            <field name="year_plan_line_id" />
+                        </group>
+                        <group>
+                            <field name="from_date" />
+                            <field name="to_date" />
+
+                        </group>
+                    </group>
+                    <group string="Plans">
+                        <field name="lines" nolabel="1" attrs="{'readonly':[('state','!=','draft')]}">
+                            <tree>
+                                <field name="week" />
+                            </tree>
+                            <form>
+                                <header>
+                                    <button string="Partially Done"
+                                            states="not_done" type="object" name="action_partially_done"
+                                            groups="school_customization.group_op_coordinator"
+                                    />
+
+                                    <button string="Done"
+                                            states="not_done,partially" type="object" name="action_done"
+                                            groups="school_customization.group_op_coordinator"
+                                    />
+                                    <field name="state" widget="statusbar" readonly="1" />
+
+                                </header>
+                                <sheet>
+                                    <group string="Week Info">
+                                        <group >
+                                            <field name="from_date" />
+                                            <field name="to_date" />
+
+                                        </group>
+                                        <group>
+                                            <field name="week" />
+                                            <field name="topic" />
+                                        </group>
+                                    </group>
+
+                                     <group string="Partial Fulfilment"
+                                             attrs="{'invisible':[('state','!=','partially')]}">
+                                        <group >
+                                            <field name="actual_finish_date" />
+                                            <field name="reason" />
+
+                                        </group>
+                                    </group>
+
+                                    <group string="Learning">
+                                        <field name="material" />
+                                        <field name="vocabulary" />
+                                        <field name="objectives" />
+                                        <field name="outcome" />
+                                        <field name="work" />
+                                        <field name="homework" />
+                                        <field name="comment" />
+                                    </group>
+                                </sheet>
+                            </form>
+
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- weekly form-->
+
+    <!--    <record id="lesson_plan_month_form_view" model="ir.ui.view">-->
+    <!--        <field name="name">lesson.plan.month.form</field>-->
+    <!--        <field name="model">month.plan</field>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--
+            </field>
+       </record>-->
+
+    <record id="lesson_plan_month_action" model="ir.actions.act_window">
+        <field name="name">Monthly Plans</field>
+        <field name="res_model">month.plan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add a Weekly Plan
+            </p>
+        </field>
+    </record>
+
+
+
+    <menuitem id="menu_action_lesson_plan_month" name="Monthly Plan"
+              sequence="10"
+              parent="menu_lesson_plans_submenu"
+              action="lesson_plan_month_action"/>
+
+</odoo>
