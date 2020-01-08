@@ -30,28 +30,11 @@ class customHolidaysType(models.Model):
 
     employee_rep_id = fields.Many2one('hr.employee', string="Employee Replacement", domain = "[('id','!=',employee_id)]")
 
-    # date_from = fields.Datetime(
-    #     'Start Date', readonly=True, index=True, copy=False, required=True,
-    #     default=fields.Datetime.now,
-    #     states={
-    #         # 'draft': [('readonly', False)],
-    #         'confirm': [('readonly', False)],
-    #         'submit': [('readonly', False)],
-    #         'supervisor': [('readonly', False)],
-    #         'gm_approval': [('readonly', False)]          
-    #         }, track_visibility='onchange')
-    
-    # date_to = fields.Datetime(
-    #     'End Date', readonly=True, copy=False, required=True,
-    #     default=fields.Datetime.now,
-    #     states={
-    #         # 'draft': [('readonly', False)],
-    #         'confirm': [('readonly', False)],
-    #         'submit': [('readonly', False)],
-    #         'supervisor': [('readonly', False)],
-    #         'gm_approval': [('readonly', False)]          
-    #         }, track_visibility='onchange')
-    
+    number_of_days = fields.Float(
+        'Duration (Days)', copy=False, readonly=True, track_visibility='onchange',
+        states={'draft': [('readonly', False)],'submit': [('readonly', False)],'supervisor': [('readonly', False)],'gm_approval': [('readonly', False)], 'confirm': [('readonly', False)]},
+        help='Number of days of the leave request according to your working schedule.')
+
 
     state = fields.Selection([
         ('submit', 'Draft'),   

@@ -11,9 +11,6 @@
           </xpath>
       </field>
     </record>
-
-
-
     <!-- Add General Manager Approval  -->
     <record id="hr_custom_leave_type_form_view" model="ir.ui.view">
       <field name="name">hr.custom.leave.type.form.view</field>
@@ -43,16 +40,13 @@
           <field name="employee_id" position="replace">
             <field name="employee_id" attrs="{'readonly':[('state','not in',['submit'])]}"/>
           </field>
-            
           <field name="holiday_status_id" position="replace">
             <field name="holiday_status_id" attrs="{'readonly':[('state','not in',['submit'])]}"      />
           </field>
-
           <field name="request_date_from" position="replace">
             <field name="request_date_from" class="oe_inline"
                                     attrs="{'readonly': [('state', 'not in', ('draft','submit','supervisor','gm_approval','confirm'))]}"/>
           </field>
-
           <field name="request_date_to" position="replace">
             <field name="request_date_to" class="oe_inline"
                 attrs="{
@@ -60,7 +54,6 @@
                     'invisible': ['|', ('request_unit_half', '=', True), ('request_unit_hours', '=', True)]
                 }"/>
           </field>
-
           <field name="name" position = "replace">
             <field name="name" attrs="{'readonly': [('state', 'not in', ('draft','submit','supervisor','gm_approval','confirm'))]}"/>
           </field>
@@ -92,7 +85,34 @@
               <field name="state" widget="statusbar" statusbar_visible="confirm,validate"/>
           </header>
         </xpath>  
+<xpath expr="//sheet/group/group[2]" position='inside'>
 
+            <!-- <label for="employee_rep_id" >Employee replacement</label> -->
+            <field name="employee_rep_id"/>
+
+
+
+          </xpath>
+          <field name="employee_id" position="replace">
+            <field name="employee_id" attrs="{'readonly':[('state','not in',['submit'])]}" invisible="1"/>
+          </field>
+          <field name="holiday_status_id" position="replace">
+            <field name="holiday_status_id" attrs="{'readonly':[('state','not in',['submit'])]}"      />
+          </field>
+          <field name="request_date_from" position="replace">
+            <field name="request_date_from" class="oe_inline"
+                                    attrs="{'readonly': [('state', 'not in', ('draft','submit','supervisor','gm_approval','confirm'))]}"/>
+          </field>
+          <field name="request_date_to" position="replace">
+            <field name="request_date_to" class="oe_inline"
+                attrs="{
+                    'readonly': [('state', 'not in', ('draft','submit','supervisor','gm_approval','confirm'))],
+                    'invisible': ['|', ('request_unit_half', '=', True), ('request_unit_hours', '=', True)]
+                }"/>
+          </field>
+          <field name="name" position = "replace">
+            <field name="name" attrs="{'readonly': [('state', 'not in', ('draft','submit','supervisor','gm_approval','confirm'))]}"/>
+          </field>
 
 
       </field>
