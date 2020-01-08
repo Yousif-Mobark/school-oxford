@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="before">
-                    <field name="bonce" string="Bonce" />
+                    <field name="bonce" string="Bonus" />
                 </xpath>
                 <xpath expr="//page[4]" position="after">
                     <page string="Bonce Of Employee">
@@ -86,7 +86,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_bonce" parent="hr_payroll.menu_hr_payroll_root" name="Employee Bonce" action="action_bonce"/>
+        <menuitem id="menu_bonce" parent="hr_payroll.menu_hr_payroll_root" name="Employee Bonus" action="action_bonce"/>
 
         <!-- form view of Employee Bonce Type-->
         <record id="view_bonce_type_form" model="ir.ui.view">
@@ -131,6 +131,6 @@
         </record>
 
         <menuitem id="menu_employee_process" parent="hr.menu_hr_root" name="Employee Process"/>
-            <menuitem id="menu_bonce_type" parent="menu_employee_process" name="Bonce Type" action="action_bonce_type"/>
+            <menuitem id="menu_bonce_type" parent="menu_employee_process" name="Bonus Type" action="action_bonce_type"/>
     </data>
 </odoo>
