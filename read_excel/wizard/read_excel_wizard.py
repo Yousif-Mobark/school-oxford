@@ -2,7 +2,6 @@
 from odoo import models, fields, api
 import base64
 import xlrd
-from openpyxl import load_workbook
 import pandas as pd
 from io import BytesIO
 from datetime import datetime
