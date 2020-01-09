@@ -14,6 +14,7 @@
                     <field name="checkIn_time_col_name"  />
                     <field name="checkOut_date_col_name" />
                     <field name="checkOut_time_col_name" />
+                    <field name="time_zone"/>
                 </group>
             </page>
           </xpath>

@@ -4,13 +4,19 @@ import base64
 import xlrd
 import pandas as pd
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime , timedelta
+
 
 class ReadExcel(models.TransientModel):
     _name = 'read.excel'
 
     excel_file = fields.Binary('Excel File', required=True)
 
+
+    def resolve_timezone(self,charTime):
+        checkin=datetime.strptime(charTime , "%H:%M:%S")
+        new= timedelta(hours=checkin.hour,minutes=checkin.minute,seconds=checkin.second) - timedelta(hours=self.env.user.company_id.time_zone)
+        return str(new)
 
     @api.multi
     def import_excel_file(self):
