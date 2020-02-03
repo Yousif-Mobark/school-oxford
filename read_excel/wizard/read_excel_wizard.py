@@ -44,8 +44,8 @@ class ReadExcel(models.TransientModel):
             if self.give_me_my_id(employess_id[i]):
                 d={
                         'employee_id': str( self.give_me_my_id(employess_id[i])), #i tried with actual employee id in firt column
-                        'check_in':  checkin_date[i]+" "+ str(checkin_time[i]).split()[0] if checkin_time[i] else False,
-                        'check_out':   CheckOut_date[i]+" "+ str(CheckOut_time[i]).split()[0] if CheckOut_time[i] else False
+                        'check_in':  checkin_date[i]+" "+ self.resolve_timezone(str(checkin_time[i]).split()[0] )if checkin_time[i] else False,
+                        'check_out':   CheckOut_date[i]+" "+ self.resolve_timezone(str(CheckOut_time[i]).split()[0]) if CheckOut_time[i] else False
                 }
                 print("\n\n\n\n\n\n\n",checkin_time,"\n\n",CheckOut_time)
                 attendance_obj.create(d)
