@@ -47,7 +47,7 @@
 
 
 
-        <menuitem name="Report" id="menu_payslip_report_1" parent="hr_payroll.menu_hr_payroll_root" sequence="200"/>
+        <menuitem name="Report" id="menu_payslip_report_1" parent="hr_payroll.menu_hr_payroll_root" sequence="3"/>
 
         <menuitem action="action_wizard_payslip" name="Payslip xlsx Report" id="menu_payslip_report" parent="menu_payslip_report_1" sequence="200"/>
         

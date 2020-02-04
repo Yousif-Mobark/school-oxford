@@ -13,6 +13,7 @@
     ],
     'data': [
         'security/hr_report_security.xml',
+        'security/ir.model.access.csv',
         'views/hr_payroll_payslips_by_employees_views.xml',
         'views/payslip_month_report.xml',
         # 'views/hr_payroll_contribution_register_report_views.xml'
