@@ -54,10 +54,11 @@ class HrPayslipRun(models.Model):
 
     def getPivot(self):
        lines = self.env['hr.payslip.line'].search([('slip_id.payslip_run_id','=',self.id)])
-       return {
+       action = self.env.ref('hr_payroll_customize.open_pivot_report_action').read()[0]
+       action['domain']=[('id','in',lines.mapped('id'))]
+       return action
 
-       }
 class hr_payslip_line(models.Model):
     _inherit="hr.payslip.line"
 
-    employee_id=fields.Many2one(related="slip_id.employee_id")
+    employee_id=fields.Many2one(related="slip_id.employee_id",store=True)
