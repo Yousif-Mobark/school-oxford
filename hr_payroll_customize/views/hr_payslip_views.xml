@@ -47,7 +47,7 @@
 
                 <button string="Confirm" name="action_confirm_batch"
                         states="submit" groups="account.group_account_manager" type="object"/>
-
+                <button string="Pivot report" name="getPivot" type="object"/>
                 <button string="Post Accounting Entries" name="action_close_batch"
                         states="confirm" groups="account.group_account_manager" type="object"/>
             </xpath>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_movements_report_excel,access.manager.product.movements.report.excel,model_product_movements_report_excel,report_access_group,1,1,1,1 
+access_wizard_payslip_report,access.manager.wizard.payslip.report,model_wizard_payslip_report,report_access_group,1,1,1,1
+access_hr_salary_rule,access.manager.hr.salary.rule,model_hr_salary_rule,report_access_group,1,1,1,1
+access_s_messag,access.manager.s.messag,model_s_messag,report_access_group,1,1,1,1
+access_hr_payslip_employees,access.manager.hr.payslip.employees,model_hr_payslip_employees,report_access_group,1,1,1,1
+access_payslip_lines_contribution_register,access.manager.payslip.lines.contribution.register,model_payslip_lines_contribution_register,report_access_group,1,1,1,1

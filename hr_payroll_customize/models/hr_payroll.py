@@ -52,3 +52,12 @@ class HrPayslipRun(models.Model):
                 raise UserError(_('You cannot delete a payslip which is not draft'))
         return super(HrPayslipRun, self).unlink()
 
+    def getPivot(self):
+       lines = self.env['hr.payslip.line'].search([('slip_id.payslip_run_id','=',self.id)])
+       return {
+
+       }
+class hr_payslip_line(models.Model):
+    _inherit="hr.payslip.line"
+
+    employee_id=fields.Many2one(related="slip_id.employee_id")

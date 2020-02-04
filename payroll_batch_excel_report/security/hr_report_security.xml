@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Category of Management -->
+    <record id="Reports_management_access_cat_report" model="ir.module.category" >
+        <field name="name">Reports Manager</field>
+    </record>
+
+    <!--The manager group -->
+    <record id="report_access_group" model="res.groups">
+        <field name="name">Manager</field>
+        <!-- <field name="help">Reservation Hotel Manager</field> -->
+        <field name="category_id" ref="Reports_management_access_cat_report" />
+    </record>
+
+</odoo>
