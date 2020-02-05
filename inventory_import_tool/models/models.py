@@ -33,7 +33,6 @@ class wizard_csv(models.TransientModel):
             row=sheet.row_values(i)
             product_id=self.env.ref(row[0])
             qty=row[1]
-            print(product_id.name,product_id.uom_id.name,qty)
             valuation.line_ids.create({
                 'location_id':valuation.location_id.id,
                 'product_id':product_id.id,
