@@ -1,0 +1,47 @@
+<odoo>
+  <data>
+
+    <record id="stock_inventory_adjusment" model="ir.ui.view">
+      <field name="name">Adjusment Wizard</field>
+      <field name="model">stock.inventory.file</field>
+      <field name="arch" type="xml">
+        <form>
+          <group col="4">
+            <field name="file"/>
+<!--            <br/>-->
+<!--            <label>make sure that the file you choose has two colomn [External_id,Qty]</label>-->
+          </group>
+          <footer>
+            <button name="fill" string="Fill" type="object" class="btn-primary"/>
+            <button string="Cancel" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+
+    <record id="action_inventory_modify" model="ir.actions.act_window">
+      <field name="name">Fill inventory</field>
+      <field name="res_model">stock.inventory.file</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="stock_inventory_adjusment"/>
+      <field name="target">new</field>
+    </record>
+
+
+    <record id="inherit_inventory_add_wizard" model="ir.ui.view">
+      <field name="name">Adjusment Wizard</field>
+      <field name="model">stock.inventory</field>
+      <field name="inherit_id" ref="stock.view_inventory_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//header" position="inside">
+            <button name="%(action_inventory_modify)d"  type="action" string="Fill Adjusment Via XSLS" states="confirm"/>
+        </xpath>
+      </field>
+    </record>
+
+
+  </data>
+</odoo>
