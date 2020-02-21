@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
+    <data noupdate="1">
         <!-- sequence order
                 basic, allowance        1-99
                 Gross                   100
@@ -221,5 +221,6 @@ result = inputs.MANADJ and inputs.MANADJ.amount</field>
                    name="rule_ids"/>
             <field name="company_id" ref="base.main_company"/>
         </record>
+
     </data>
 </odoo>

@@ -15,6 +15,7 @@
         'data/hr_payroll_data.xml',
         'views/hr_contract_views.xml',
         'views/hr_payslip_views.xml',
+        'report/payslip_report.xml',
     ],
     'installable': True,
     'application': True,

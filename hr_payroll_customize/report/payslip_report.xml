@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <report id="payslip_report"
+                string="Oxford School Payslip"
+                model="hr.payslip"
+                report_type="qweb-pdf"
+                name="hr_payroll_customize.payslip_report_view"/>
+
+        <template id="payslip_report_view">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="header">
+                        <link rel="stylesheet" href="/hr_payroll_customize/static/src/css/rtl.css"/>
+                        <h6 class="text-center">بسم الله الرحمن الرحيم</h6>
+                        <img style="display: block; margin-left: auto; margin-right: auto;"
+                             height="90"
+                             src="/hr_payroll_customize/static/img/logo.png"/>
+                        <h3 class="text-center"><u>اكاديمية اكسفورد السودانية</u></h3>
+                    </div>
+                    <div class="article">
+                        <link rel="stylesheet" href="/hr_payroll_customize/static/src/css/rtl.css"/>
+                        <br/>
+                        <h5 align="right">
+                            <span> التاريخ : </span>
+                            <span t-esc="time.strftime('%d / %m / %Y')"/>
+                        </h5>
+                        <h5 align="right">
+                            <b>
+                                <span>السيد / ة : </span>
+                                <span t-field="docs.employee_id"/>
+                            </b>
+                        </h5>
+                        <h5 align="right" style="line-height: 1.8;">
+                            <span>نشكر سيادتكم على المجهود الذي بذلتموه من أجل المدرسه وبذلك ننوه سيادتكم بأننا سنمنح سيادتكم مبلغ وقدره </span>
+                            <t t-esc="o.contract_id.wage - o.deduction"/>
+                            <span> جنيه عبارة عن مكافأة لشهر </span>
+                            <span t-esc="o.date_from.strftime('%B %Y')"/>
+                        </h5>
+
+                        <h5 class="text-center">ولكم منا جزيل الشكر</h5>
+                        <br/>
+                        <h5 class="col-6 pull-right">
+                            <span>التوقيع بالإستلام:.............................</span>
+                        </h5>
+                        <h5 class="col-6 pull-left text-center">
+                            <span>المدير المالي</span>
+                        </h5>
+                        <br/>
+                        <br/>
+                        <hr style="border-top: dotted 1px;" />
+                        <h6 class="text-center">بسم الله الرحمن الرحيم</h6>
+                        <img style="display: block; margin-left: auto; margin-right: auto;"
+                             height="90"
+                             src="/hr_payroll_customize/static/img/logo.png"/>
+                        <h3 class="text-center"><u>اكاديمية اكسفورد السودانية</u></h3>
+                        <h5 align="right">
+                            <span> التاريخ : </span>
+                            <span t-esc="time.strftime('%d / %m / %Y')"/>
+                        </h5>
+                        <h5 align="right">
+                            <b>
+                                <span>السيد / ة : </span>
+                                <span t-field="docs.employee_id"/>
+                            </b>
+                        </h5>
+                        <table dir="rtl" class="table table-bordered">
+                            <tr class="text-center">
+                                <td width="30%">المرتب الأساسي</td>
+                                <td width="70%">
+                                    <span t-field="o.contract_id.basic"/>
+                                    <span>ج</span>
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">التأمين 8%</td>
+                                <td width="70%">
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <t t-if="line.code=='SI8'">
+                                            <span t-field="line.total"/>
+                                        </t>
+                                    </t>
+                                    <span>ج</span>
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">الضريبة 15%</td>
+                                <td width="70%">
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <t t-if="line.code=='TAX'">
+                                            <span t-field="line.total"/>
+                                        </t>
+                                    </t>
+                                    <span>ج</span>
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">الخصومات</td>
+                                <td width="70%">
+                                    <span t-field="o.deduction"/>
+                                    <span>ج</span>
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">رسوم أبناء العاملين</td>
+                                <td width="70%"></td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">Uniform</td>
+                                <td width="70%"></td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">إجمالي الخصومات</td>
+                                <t t-set="ldt" t-value="0"/>
+                                <td width="70%">
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                        <t t-if="line.category_id.code=='LDED'">
+                                            <t t-set="ldt" t-value="ldt+line.total"/>
+                                        </t>
+                                    </t>
+                                    <t t-esc="ldt"/>
+                                    <span>ج</span>
+                                </td>
+                            </tr>
+                            <tr class="text-center">
+                                <td width="30%">صافي المرتب</td>
+                                <td width="70%">
+                                    <t t-esc="o.contract_id.basic - ldt"/>
+                                    <span>ج</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <h5 class="col-6 pull-right">
+                            <span>التوقيع بالإستلام:.............................</span>
+                        </h5>
+                    </div>
+                    <div class="footer">
+                    </div>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
