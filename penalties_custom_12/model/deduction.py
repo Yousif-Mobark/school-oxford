@@ -158,8 +158,7 @@ class Payslip(models.Model):
     deduction = fields.Float(string='Deduction', compute='_compute_deduction')
     deduction_line = fields.One2many('deduction.line', 'payslip', string='Deduction line', )
 
-    @api.onchange('employee_id')
-    def payslip_deduction(self):
+    def compute_sheet(self):
         employee_deduction_ids = self.env['deduction.deduction'].search([('employee', '=', self.employee_id.id),
                                                                          ('is_paid', '=', False),
                                                                          ('state', '=', 'done')])
@@ -177,6 +176,7 @@ class Payslip(models.Model):
                     'date': deduction.date,
                 })
         self.deduction_line = lines
+        return super(Payslip, self).compute_sheet()
 
     @api.multi
     def action_payslip_done(self):

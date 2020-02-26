@@ -156,8 +156,7 @@ class Payslip(models.Model):
     bonce = fields.Float(string='Bonce', compute='compute_bon', store=True)
     bonce_line = fields.One2many('bonce.line', 'payslip', string='Bonce lines')
 
-    @api.onchange('employee_id')
-    def payslip_bonce(self):
+    def compute_sheet(self):
         employee_bonce_ids = self.env['bonce.bonce'].search([('employee', '=', self.employee_id.id),
                                                              ('is_paid', '=', False),
                                                              ('state', '=', 'done')])
@@ -175,6 +174,7 @@ class Payslip(models.Model):
                     'date': bonce.date,
                 })
         self.bonce_line = lines
+        return super(Payslip, self).compute_sheet()
 
     @api.multi
     def action_payslip_done(self):
