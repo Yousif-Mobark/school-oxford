@@ -136,7 +136,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_deduction_type" parent="hr_payroll.menu_hr_payroll_configuration" name="deduction Type" action="action_deduction_type"/>
+        <menuitem id="menu_deduction_type" parent="hr_payroll.menu_hr_payroll_configuration" name="Deduction Type" action="action_deduction_type"/>
 
     </data>
 </odoo>

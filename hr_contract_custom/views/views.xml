@@ -1,0 +1,23 @@
+<odoo>
+  <data>
+    <!-- Contracts Customized Search View -->
+    <record id="view_hr_contract_search_inherit" model="ir.ui.view">
+      <field name="name">hr.contract.search.inherit</field>
+      <field name="model">hr.contract</field>
+      <field name="inherit_id" ref="hr_contract.hr_contract_view_search"/>
+      <field name="arch" type="xml">
+        <xpath expr="//filter[@name='to_renew']" position="before">
+          <filter name="this_month_filter" string="This Month"
+                  domain="[('date_end', '&lt;', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')),('date_end', '&gt;=', time.strftime('%%Y-%%m-01'))]"/>
+          <separator/>
+          <filter name="next_month_filter" string="Next Month"
+                  domain="[('date_end', '&lt;', (context_today()+relativedelta(months=2)).strftime('%%Y-%%m-01')),('date_end', '&gt;=', (context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01'))]"/>
+          <separator/>
+          <filter name="prev_month_filter" string="Previous Month"
+                  domain="[('date_end', '&gt;=', (context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('date_end', '&lt;', time.strftime('%%Y-%%m-01'))]"/>
+          <separator/>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

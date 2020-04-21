@@ -12,7 +12,7 @@ class Bonce(models.Model):
     bonce_no = fields.Char(string='Sequence', readonly=True)
     date = fields.Date(string="Date", default=date.today())
     employee = fields.Many2one('hr.employee', string="Employee", required=True)
-    bonce_type = fields.Many2one('bonce.type', string='Bonce Type', required=True)
+    bonce_type = fields.Many2one('bonce.type', string='Bonus Type', required=True)
     fix_formula = fields.Selection([('formula', 'Formula'), ("fix", "Fixed")], string='Fix/Formula', required=True)
     amount = fields.Float(string="Amount", track_visibility='onchange')
     description = fields.Text(string='Description', required=True)
@@ -140,7 +140,7 @@ class BonceType(models.Model):
 
     active = fields.Boolean(string='Active', default=True)
     name = fields.Char(string='Name', required=True)
-    pay_included = fields.Selection([('payslip', 'Payslip'), ("voucher", "Voucher")], string='Bonce Type',
+    pay_included = fields.Selection([('payslip', 'Payslip'), ("voucher", "Voucher")], string='Bonus Type',
                                     default='payslip')
 
     def toggle_active(self):

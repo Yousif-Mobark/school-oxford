@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
+
         <!-- inherit view of payslip-->
         <record id="view_bonce_inh_payslip_form" model="ir.ui.view">
             <field name="name">payslip.bonce.payslips</field>
@@ -31,7 +32,7 @@
             <field name="name">bonce.bonce</field>
             <field name="model">bonce.bonce</field>
             <field name="arch" type="xml">
-                <form string="Employee Bonce">
+                <form string="Employee Bonus">
                     <header>
                         <button name="action_confirm" type="object" string="Confirm" states="draft" class="oe_highlight"/>
                         <button name="set_amount" type="object" string="Calc Amount" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('fix_formula', '=', 'fix')]}" class="oe_highlight"/>
@@ -40,11 +41,11 @@
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,confirm,hr_manager,done"/>
                     </header>
-                    <sheet string="Employee Bonce ">
+                    <sheet string="Employee Bonus">
                         <div>
                             <h3><field name="bonce_no" readonly="1"/></h3>
                         </div>
-                        <group string="Bonce">
+                        <group string="Bonus">
                             <group>
                                 <field name="employee" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                 <field name="description" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
@@ -68,7 +69,7 @@
             <field name="name">bonce.bonce</field>
             <field name="model">bonce.bonce</field>
             <field name="arch" type="xml">
-                <tree string="Employee Bonce">
+                <tree string="Employee Bonus">
                     <field name="name"/>
                     <field name="employee"/>
                     <field name="date"/>
@@ -80,20 +81,20 @@
 
         <!-- Action of Bonce -->
         <record id="action_bonce" model="ir.actions.act_window">
-            <field name="name">Bonce Bonce</field>
+            <field name="name">Employee Bonus</field>
             <field name="res_model">bonce.bonce</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_bonce" parent="hr_payroll.menu_hr_payroll_root" name="Employee Bonus" action="action_bonce"/>
+        <menuitem id="menu_bonce" parent="menu_employee_process" name="Employee Bonus" action="action_bonce"/>
 
         <!-- form view of Employee Bonce Type-->
         <record id="view_bonce_type_form" model="ir.ui.view">
             <field name="name">bonce.type</field>
             <field name="model">bonce.type</field>
             <field name="arch" type="xml">
-                <form string="Employee Bonce">
+                <form string="Employee Bonus">
                     <sheet string="Bonce Type">
                         <div class="oe_button_box" name="button_box">
                             <button name="toggle_active" type="object"  class="oe_stat_button" icon="fa-archive">
@@ -114,7 +115,7 @@
             <field name="name">bonce.Type</field>
             <field name="model">bonce.type</field>
             <field name="arch" type="xml">
-                <tree string="Bonce Type">
+                <tree string="Bonus Type">
                     <field name="name"/>
                     <field name="pay_included"/>
                     <field name="active"/>
@@ -124,13 +125,14 @@
 
         <!-- Action of Bonce Type-->
         <record id="action_bonce_type" model="ir.actions.act_window">
-            <field name="name">Bonce type</field>
+            <field name="name">Bonus type</field>
             <field name="res_model">bonce.type</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_employee_process" parent="hr.menu_hr_root" name="Employee Process"/>
-            <menuitem id="menu_bonce_type" parent="menu_employee_process" name="Bonus Type" action="action_bonce_type"/>
+        <menuitem id="menu_employee_process" parent="hr_payroll.menu_hr_payroll_root" name="Employee Process"/>
+        <menuitem id="menu_bonce_type" parent="hr_payroll.menu_hr_payroll_configuration" name="Bonus Type" action="action_bonce_type"/>
+
     </data>
 </odoo>

@@ -34,10 +34,16 @@ class OpAdmission(models.Model):
     _description = "Admission"
 
     name = fields.Char(
-        'First Name', size=128, required=True,
+        'Name', size=128, required=True,
+        states={'done': [('readonly', True)]})
+    first_name = fields.Char(
+        'First Name', size=128,
         states={'done': [('readonly', True)]})
     middle_name = fields.Char(
         'Middle Name', size=128,
+        states={'done': [('readonly', True)]})
+    third_name = fields.Char(
+        'Third Name', size=128,
         states={'done': [('readonly', True)]})
     last_name = fields.Char(
         'Last Name', size=128, required=True,
@@ -135,8 +141,14 @@ class OpAdmission(models.Model):
             sd = self.student_id
             self.title = sd.title and sd.title.id or False
             self.name = sd.name
+            self.first_name = sd.first_name
             self.middle_name = sd.middle_name
+            self.third_name = sd.third_name
             self.last_name = sd.last_name
+            self.ar_first_name = sd.ar_first_name
+            self.ar_middle_name = sd.ar_middle_name
+            self.ar_third_name = sd.ar_third_name
+            self.ar_last_name = sd.ar_last_name
             self.birth_date = sd.birth_date
             self.gender = sd.gender
             self.image = sd.image or False
@@ -153,7 +165,9 @@ class OpAdmission(models.Model):
         else:
             self.title = ''
             self.name = ''
+            self.first_name = ''
             self.middle_name = ''
+            self.third_name = ''
             self.last_name = ''
             self.birth_date = ''
             self.gender = ''
@@ -167,6 +181,21 @@ class OpAdmission(models.Model):
             self.country_id = False
             self.state_id = False
             self.partner_id = False
+
+    @api.one
+    def action_modify(self):
+        invoice_ids = self.env['account.invoice'].search([('application_id', '=', self.id)])
+        for invoice in invoice_ids:
+            for line in invoice.move_id.line_ids:
+                line.remove_move_reconcile()
+            invoice.action_cancel()
+        enrollment_id = self.env['op.student.course'].search([('student_id', '=', self.student_id.id),
+                                                              ('course_id', '=', self.course_id.id),
+                                                              ('batch_id', '=', self.batch_id.id)])
+
+        enrollment_id.unlink()
+        self.state = 'draft'
+        self.paid_reg = False
 
     @api.onchange('register_id')
     def onchange_register(self):

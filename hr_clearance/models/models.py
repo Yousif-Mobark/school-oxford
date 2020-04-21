@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
 from pytz import timezone, UTC
-
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
-class hrClearance(models.Model):
+
+class HrClearance(models.Model):
     _name = "hr.clearance"
     _inherit = ["mail.thread"]
     _rec_name = "employee_id"
@@ -48,12 +48,10 @@ class hrClearance(models.Model):
         if self.state != "done":
             self.state = "draft"
 
-
     @api.multi
     def unlink(self):
         for rec in self:
             if rec.state != 'draft':
                 raise UserError(
                     _('You cannot delete Form which is not is draft.'))
-        return super(EmployeePenalties, self).unlink()
-    
+        return super(HrClearance, self).unlink()
