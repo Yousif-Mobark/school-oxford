@@ -161,6 +161,8 @@ class Payslip(models.Model):
     def compute_sheet(self):
         employee_deduction_ids = self.env['deduction.deduction'].search([('employee', '=', self.employee_id.id),
                                                                          ('is_paid', '=', False),
+                                                                         ('date', '<=', self.date_to),
+                                                                         ('date', '>=', self.date_from),
                                                                          ('state', '=', 'done')])
         if self.deduction_line:
             self.deduction_line.sudo().unlink()

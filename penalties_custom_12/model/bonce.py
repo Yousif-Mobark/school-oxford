@@ -158,6 +158,8 @@ class Payslip(models.Model):
 
     def compute_sheet(self):
         employee_bonce_ids = self.env['bonce.bonce'].search([('employee', '=', self.employee_id.id),
+                                                             ('date', '<=', self.date_to),
+                                                             ('date', '>=', self.date_from),
                                                              ('is_paid', '=', False),
                                                              ('state', '=', 'done')])
         if self.bonce_line:
