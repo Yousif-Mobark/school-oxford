@@ -12,7 +12,7 @@
                     <field name="bonce" string="Bonus" />
                 </xpath>
                 <xpath expr="//page[4]" position="after">
-                    <page string="Bonce Of Employee">
+                    <page string="Bonus Of Employee">
                         <field name="bonce_line" nolabel="1" readonly="0">
                             <tree>
                                 <field name="name"/>
