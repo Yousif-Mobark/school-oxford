@@ -57,6 +57,7 @@ class CreateRegisterInvoice(models.TransientModel):
             # 'name': self.name,
             'type': 'out_invoice',
             'reference': False,
+            'date_invoice': fields.Date.today(),
             'student_id': application.student_id.id or False,
             'application_id': application.id or False,
             'origin': application.student_id.gr_no or False,
@@ -73,6 +74,7 @@ class CreateRegisterInvoice(models.TransientModel):
                 'product_id': product.id,
             })],
         })
+        print("###################################################################")
         invoice.compute_taxes()
         return invoice
 

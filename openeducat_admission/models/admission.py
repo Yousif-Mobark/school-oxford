@@ -139,6 +139,7 @@ class OpAdmission(models.Model):
     def change_name(self):
         self.name = self.first_name + " " + self.middle_name + " " + self.third_name + " " + self.last_name
         print(self.name ,"##################)(((((((((++++++++)___________++++++++++++++++++==================")
+
     @api.onchange('student_id', 'is_student')
     def onchange_student(self):
         if self.is_student and self.student_id:
@@ -429,6 +430,7 @@ class OpAdmission(models.Model):
             'name': self.name,
             'origin': self.application_number,
             'type': 'out_invoice',
+            'date_invoice': fields.Date.today(),
             'reference': False,
             'account_id': partner_id.property_account_receivable_id.id,
             'partner_id': partner_id.id,
