@@ -37,11 +37,12 @@ class OpStudent(models.Model):
     def _compute_full_name(self):
         for rec in self:
             full_name = ''
-            names = [rec.name, rec.middle_name, rec.third_name, rec.last_name]
+            names = [rec.first_name, rec.middle_name, rec.third_name, rec.last_name]
             if rec.name and rec.middle_name and rec.third_name and rec.last_name:
                 for name in names:
                     full_name += name + " "
                 rec.full_name = full_name
+                rec.name = full_name
             else:
                 rec.full_name = names[0]
 

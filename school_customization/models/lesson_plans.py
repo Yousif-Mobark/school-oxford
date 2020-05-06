@@ -114,16 +114,22 @@ class LessonPlanYearly(models.Model):
         ('book_year_uniq', 'unique (book_id)', "This Book Already has a year plan"),
     ]
 
-# Workflow
+    # Workflow
     def action_submit(self):
         for rec in self:
-            emp_id = rec.faculty_id.emp_id
-            if not emp_id:
-                raise ValidationError(
-                    "There is no Employee record attached to your faculty position please contact the system admin")
-            if not emp_id.parent_id and (emp_id != emp_id.department_id.manager_id):
-                raise ValidationError("there is no specified coordinator to you, please contact HR")
+            # emp_id = rec.faculty_id.emp_id
+            # if not emp_id:
+            #     raise ValidationError(
+            #         "There is no Employee record attached to your faculty position please contact the system admin")
+            # if not emp_id.parent_id and (emp_id != emp_id.department_id.manager_id):
+            #     raise ValidationError("there is no specified coordinator to you, please contact HR")
             rec.state = 'submit'
+
+    def unlink(self):
+        if self.state == 'approve':
+            raise ValidationError(_("You cannot delete a record which has been approved!"))
+        else:
+            return super(LessonPlanYearly, self).unlink()
 
     def action_approve(self):
         for rec in self:
@@ -269,6 +275,12 @@ class LessonPlanMonth(models.Model):
             if not emp_id.parent_id:
                 raise ValidationError("there is no specified coordinator to you, please contact HR")
             rec.state = 'submit'
+
+    def unlink(self):
+        if self.state == 'approve':
+            raise ValidationError(_("You cannot delete a record which has been approved!"))
+        else:
+            return super(LessonPlanMonth, self).unlink()
 
     def action_approve(self):
         for rec in self:

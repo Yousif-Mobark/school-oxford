@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo> 
 
-
     <!-- inherit view of payslip-->
     <record id="custom_hr_employee_form" model="ir.ui.view">
         <field name="name">custom.hr.employee.form</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-
             <field name="barcode" position="after">
                 <field name="device_id" string="Device ID" />
             </field>
         </field>
     </record>
-
 
 	<record id="read_excel_form" model="ir.ui.view">
 		<field name="name">read.excel.form</field>
@@ -28,7 +25,6 @@
                     <button string="Import Excel File" name="import_excel_file" type="object" class="oe_highlight" />
                 </footer>
                 </form>
-			
 		</field>
 	</record>
 

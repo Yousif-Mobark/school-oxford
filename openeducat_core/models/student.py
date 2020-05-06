@@ -103,3 +103,4 @@ class OpStudent(models.Model):
             'label': _('Import Template for Students'),
             'template': '/openeducat_core/static/xls/op_student.xls'
         }]
+

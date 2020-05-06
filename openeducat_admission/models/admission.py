@@ -38,16 +38,16 @@ class OpAdmission(models.Model):
         states={'done': [('readonly', True)]})
     first_name = fields.Char(
         'First Name', size=128,
-        states={'done': [('readonly', True)]})
+        states={'done': [('readonly', False)]})
     middle_name = fields.Char(
         'Middle Name', size=128,
-        states={'done': [('readonly', True)]})
+        states={'done': [('readonly', False)]})
     third_name = fields.Char(
         'Third Name', size=128,
-        states={'done': [('readonly', True)]})
+        states={'done': [('readonly', False)]})
     last_name = fields.Char(
-        'Last Name', size=128, required=True,
-        states={'done': [('readonly', True)]})
+        'Last Name', size=128, required=False,
+        states={'done': [('readonly', False)]})
     title = fields.Many2one(
         'res.partner.title', 'Title', states={'done': [('readonly', True)]})
     application_number = fields.Char(
@@ -135,12 +135,17 @@ class OpAdmission(models.Model):
          'Email must be unique per Application!')
     ]
 
+    @api.onchange('first_name', 'middle_name', 'third_name', 'last_name')
+    def change_name(self):
+        self.name = self.first_name + " " + self.middle_name + " " + self.third_name + " " + self.last_name
+        print(self.name ,"##################)(((((((((++++++++)___________++++++++++++++++++==================")
     @api.onchange('student_id', 'is_student')
     def onchange_student(self):
         if self.is_student and self.student_id:
             sd = self.student_id
             self.title = sd.title and sd.title.id or False
             self.name = sd.name
+            print(self.name, "##########################")
             self.first_name = sd.first_name
             self.middle_name = sd.middle_name
             self.third_name = sd.third_name

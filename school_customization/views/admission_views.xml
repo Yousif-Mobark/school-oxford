@@ -32,6 +32,7 @@
                                attrs="{'required':[('is_student','=',True)],'invisible': [('is_student','=', False)]}"/>
                     </div>
                     <field name="image" widget="image" class="oe_left oe_avatar"/>
+                    <field name="name" invisible="1" force_save="1"/>
                     <div class="oe_title">
                         <h1>
                             <table>
@@ -49,7 +50,8 @@
                                                style="padding-right:10px"  required="1"/>
                                     </td>
                                     <td>
-                                        <field name="last_name" placeholder="Last Name" style="padding-right:10px"/>
+                                        <field name="last_name" placeholder="Last Name" required="1"
+                                               style="padding-right:10px"/>
                                     </td>
                                 </tr>
                             </table>

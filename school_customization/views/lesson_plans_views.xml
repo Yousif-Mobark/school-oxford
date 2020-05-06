@@ -117,7 +117,7 @@
                     />
                     <button string="Approve"
                             states="submit" type="object" name="action_approve"
-                            groups="school_customization.group_op_coordinator"
+                            groups="openeducat_core.group_op_back_office_admin"
                     />  <button string="Reset to Draft"
                                 states="approve" type="object" name="action_set_draft"
                 />
@@ -206,7 +206,7 @@
                     />
                     <button string="Approve"
                             states="submit" type="object" name="action_approve"
-                            groups="school_customization.group_op_coordinator"
+                            groups="openeducat_core.group_op_back_office_admin"
                     />  <button string="Reset to Draft"
                                 states="approve" type="object" name="action_set_draft"
                 />
