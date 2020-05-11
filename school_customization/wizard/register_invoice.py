@@ -1,6 +1,5 @@
-from datetime import timedelta
-
-from odoo import models, fields, api
+# -*- coding: utf-8 -*-
+from odoo import models, fields, api, _
 from odoo.exceptions import UserError, AccessError
 
 

@@ -12,7 +12,7 @@ class Deduction(models.Model):
     name = fields.Char(string='Reference', required=True)
     deduction_no = fields.Char(string='Sequence', readonly=True)
     date = fields.Date(string="Date", default=date.today())
-    employee = fields.Many2one('hr.employee', string="Employee", required=True)
+    employee = fields.Many2one('hr.employee', string="Employee", required=False)
     deduction_type = fields.Many2one('deduction.type', string='Deduction Type', required=True)
     fix_formula = fields.Selection([('formula', 'Formula'), ("fix", "Fixed")], string='Calculation Type', required=True,
                                    default='fix')

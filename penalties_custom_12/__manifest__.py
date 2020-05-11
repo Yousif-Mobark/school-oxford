@@ -13,6 +13,7 @@
          'views/res_setting_config_view.xml',
          'data/sequence.xml',
          'views/bonce.xml',
+         'wizard/absence_deduction_wizard_views.xml',
          'views/deduction.xml',
          'views/penalties.xml',
 

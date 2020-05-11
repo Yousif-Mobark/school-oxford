@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Absence deduction wizard action -->
+        <record model="ir.actions.act_window" id="act_absence_deduction_wizard">
+            <field name="name">Absence Detection</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">absence.deduction.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Absence deduction form view -->
+        <record id="absence_deduction_form_view" model="ir.ui.view">
+            <field name="name">absence.deduction.wizard.form</field>
+            <field name="model">absence.deduction.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group string="Absence days between two dates">
+                        <group>
+                            <field name="employees_selection" required="1"/>
+                        </group>
+                        <group>
+                            <field attrs="{'invisible': [('employees_selection', '=', 'all')]}"
+                                   widget="many2many_tags"
+                                   name="employee_ids"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="deduction_type_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <span>
+                            <button string="GENERATE DEDUCTIONS"
+                                    type="object"
+                                    name="calculate_deductions"
+                                    class="oe_highlight"/>
+                            OR
+                            <button special="cancel" string="CANCEL" type="object"/>
+                        </span>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

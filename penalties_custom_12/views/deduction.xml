@@ -55,7 +55,7 @@
                             </group>
                             <group>
                                 <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                                <field name="deduction_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="deduction_type" attrs="{'readonly': [('state', '!=', 'draft')]}" required="1"/>
                                 <field name="fix_formula" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                                 <field name="formual"  attrs="{'readonly': [('state', '!=', 'draft')],'invisible':[('fix_formula','=','fix')]}"
                                 placeholder="result=(wage/30)*5"/>
@@ -90,6 +90,7 @@
         </record>
 
         <menuitem id="menu_deduction" parent="menu_employee_process" name="Employee Deduction" action="action_deduction"/>
+        <menuitem id="menu_absence_calculation" parent="menu_employee_process" name="Absence Calculation" action="act_absence_deduction_wizard"/>
 
 
         <!-- form view of Employee Bonce Type-->
