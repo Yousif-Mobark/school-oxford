@@ -87,7 +87,7 @@ class CreateRegisterInvoice(models.TransientModel):
                 raise UserError("Incorrect fees amount")
             application.register_student()
             student = application.student_id
-            partner = student.user_id.partner_id
+            partner = student.partner_id
             invoice = self.create_invoice(partner)
             application_vals = {
                 'res_invoice_id': invoice.id,

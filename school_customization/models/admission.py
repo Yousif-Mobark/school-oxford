@@ -1,15 +1,17 @@
 import random
 from datetime import datetime
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
-from odoo.tools import float_compare, float_is_zero
+from odoo.tools import float_compare
 
 DUMMY_DOMAIN = "soa.com"
 
+
 def get_percentage(total, part):
-    return (part*100) / total
+    return (part * 100) / total
 
 
 class OpAdmission(models.Model):
@@ -42,7 +44,7 @@ class OpAdmission(models.Model):
         ('new', 'New Admission')
     ]
 
-    @api.depends('register_id','admission_type')
+    @api.depends('register_id', 'admission_type')
     def get_fees(self):
         for rec in self:
             year = rec.year_id
@@ -50,7 +52,9 @@ class OpAdmission(models.Model):
             admission_type = rec.admission_type
             if year and course:
                 fees_line = self.env["school.fee.line"].search([('school_fee_id.year_id', '=', year.id),
-                                                                ('course_id', '=', course.id), ('school_fee_id.category', '=', admission_type)], limit=1)
+                                                                ('course_id', '=', course.id),
+                                                                ('school_fee_id.category', '=', admission_type)],
+                                                               limit=1)
                 rec.fees_line_id = fees_line
 
     def _get_batch(self):
@@ -70,7 +74,6 @@ class OpAdmission(models.Model):
         course = self.env["op.course"].browse(course_id.id)
         self.batch_id = course.batch_id
 
-
     def get_siblings_discount(self):
         discounts = self.discount_ids
         total_percentage = 0
@@ -80,7 +83,6 @@ class OpAdmission(models.Model):
             percentage = self.get_percentage(discount.amount)
             total_percentage += percentage
         return total_percentage
-
 
     @api.onchange('school_fees', 'discount_ids', 'percentage_discount', "amount_discount")
     def onchange_discounts(self):
@@ -125,11 +127,10 @@ class OpAdmission(models.Model):
             else:
                 rec.full_name = names[0]
 
-
     # names
     third_name = fields.Char(
         'Third Name', size=128,
-        states={'done': [('readonly', True)]})
+        states={'done': [('readonly', False)]})
     full_name = fields.Char(string="Full Name", compute="_compute_full_name")
 
     ar_first_name = fields.Char(string="First Name", size=128)
@@ -146,7 +147,6 @@ class OpAdmission(models.Model):
     primary_lang = fields.Selection(LANG_SEL, "Mother Tongue")
     lang = fields.Char("Language")
 
-    
     nationality_id = fields.Many2one("res.country", "Nationality")
     religion = fields.Selection(RELIGION_SEL, "Religion")
     other_religion = fields.Char("Other Religion")
@@ -227,7 +227,17 @@ class OpAdmission(models.Model):
     # # #####################################################################################
 
     def submit_form(self):
-        ## register student
+        student_name = self.first_name + ' ' + self.middle_name + ' ' + self.third_name + ' ' + self.last_name
+        student = self.env['op.student'].create({'name': student_name, 'gender': self.gender,
+                                                 'birth_date': self.birth_date, 'blood_group': self.blood_group,
+                                                 'first_name': self.first_name, 'middle_name': self.middle_name,
+                                                 'third_name': self.third_name, 'last_name': self.last_name,
+                                                 'nationality': self.nationality_id.id, 'email': self.email,
+                                                 'mobile': self.mobile, 'phone': self.phone, 'street': self.street,
+                                                 'street2': self.street2, 'city': self.city, 'zip': self.zip,
+                                                 'country_id': self.country_id, 'state_id': self.state_id,
+                                                 'religion': self.religion})
+        self.student_id = student.id
         self.state = 'submit'
         self.admission_confirm()
 
@@ -357,7 +367,7 @@ class OpAdmission(models.Model):
                 'city': student.city,
                 'nationality': student.nationality_id.id,
                 'country_id':
-                student.country_id and student.country_id.id or False,
+                    student.country_id and student.country_id.id or False,
                 'state_id': student.state_id and student.state_id.id or False,
                 'image': student.image,
                 'zip': student.zip,
@@ -365,7 +375,7 @@ class OpAdmission(models.Model):
                 'course_id': student.course_id.id,
                 'batch_id': student.batch_id.id,
                 'gr_no': gr_no,
-                }
+            }
             student_user.partner_id.write(details)
             details.update({
                 'title': student.title and student.title.id or False,
@@ -482,8 +492,9 @@ class OpAdmission(models.Model):
         res = self.env.ref('account.invoice_form')
         result['views'] = [(res and res.id or False, 'form')]
         result['res_id'] = inv_id.id or False
-        print (result['res_id'])
+        print(result['res_id'])
         return result
+
 
 ###############################################
 
@@ -495,15 +506,12 @@ class OpAdmissionRegister(models.Model):
         'Start Date', required=False)
     end_date = fields.Date(
         'End Date', required=False)
-    year_id = fields.Many2one("school.year", "School Year", default= lambda self: self.env['school.year'].get_default_year())
+    year_id = fields.Many2one("school.year", "School Year",
+                              default=lambda self: self.env['school.year'].get_default_year())
     product_id = fields.Many2one(
         'product.product', 'Year Fees',
         domain=[('type', '=', 'service')])
 
-
-
     @api.multi
     def confirm_register(self):
         self.state = 'admission'
-
-
