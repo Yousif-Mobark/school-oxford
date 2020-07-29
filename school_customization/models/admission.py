@@ -228,16 +228,17 @@ class OpAdmission(models.Model):
 
     def submit_form(self):
         student_name = self.first_name + ' ' + self.middle_name + ' ' + self.third_name + ' ' + self.last_name
-        student = self.env['op.student'].create({'name': student_name, 'gender': self.gender,
-                                                 'birth_date': self.birth_date, 'blood_group': self.blood_group,
-                                                 'first_name': self.first_name, 'middle_name': self.middle_name,
-                                                 'third_name': self.third_name, 'last_name': self.last_name,
-                                                 'nationality': self.nationality_id.id, 'email': self.email,
-                                                 'mobile': self.mobile, 'phone': self.phone, 'street': self.street,
-                                                 'street2': self.street2, 'city': self.city, 'zip': self.zip,
-                                                 'country_id': self.country_id, 'state_id': self.state_id,
-                                                 'religion': self.religion})
-        self.student_id = student.id
+        if not self.student_id:
+            student = self.env['op.student'].create({'name': student_name, 'gender': self.gender,
+                                                     'birth_date': self.birth_date, 'blood_group': self.blood_group,
+                                                     'first_name': self.first_name, 'middle_name': self.middle_name,
+                                                     'third_name': self.third_name, 'last_name': self.last_name,
+                                                     'nationality': self.nationality_id.id, 'email': self.email,
+                                                     'mobile': self.mobile, 'phone': self.phone, 'street': self.street,
+                                                     'street2': self.street2, 'city': self.city, 'zip': self.zip,
+                                                     'country_id': self.country_id, 'state_id': self.state_id,
+                                                     'religion': self.religion})
+            self.student_id = student.id
         self.state = 'submit'
         self.admission_confirm()
 
